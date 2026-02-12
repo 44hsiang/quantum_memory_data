@@ -1,0 +1,21 @@
+[project]
+name = "quantum-memory-data"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "qualibrate==0.4.0",
+    "quam>=0.5.0a3",
+    "quam-libs",
+    "xarray>=2026.1.0",
+]
+
+[tool.uv.workspace]
+members = [
+    "quam_libs",
+]
+
+[tool.uv.sources]
+quam-libs = { workspace = true, editable = true }
+
