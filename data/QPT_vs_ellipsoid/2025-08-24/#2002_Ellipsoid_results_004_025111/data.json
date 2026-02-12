@@ -1,0 +1,44 @@
+{
+    "ds": "./ds.h5",
+    "figs": {},
+    "results": {
+        "raw data": {
+            "axes": "./arrays.npz#results.raw data.axes",
+            "center": "./arrays.npz#results.raw data.center",
+            "R": "./arrays.npz#results.raw data.R",
+            "volume": 1.1923546188737137,
+            "param": "./arrays.npz#results.raw data.param",
+            "choi state": "./arrays.npz#results.raw data.choi state",
+            "negativity": 0.48324734037730555,
+            "memory robustness": 0.4823237746666589
+        },
+        "MLE data": {
+            "axes": "./arrays.npz#results.MLE data.axes",
+            "center": "./arrays.npz#results.MLE data.center",
+            "R": "./arrays.npz#results.MLE data.R",
+            "volume": 3.701854842531672,
+            "param": "./arrays.npz#results.MLE data.param",
+            "choi state": "./arrays.npz#results.MLE data.choi state",
+            "negativity": 0.9237768899503934,
+            "memory robustness": 0.92376255205822
+        }
+    },
+    "raw_plot": "./raw_plot.png",
+    "MLE_plot": "./MLE_plot.png",
+    "initial_parameters": {
+        "qubits": [
+            "q0"
+        ],
+        "num_runs": 10000,
+        "alpha": 1.25,
+        "reset_type_thermal_or_active": "active",
+        "flux_point_joint_or_independent": "joint",
+        "simulate": false,
+        "simulation_duration_ns": 10000,
+        "timeout": 100,
+        "load_data_id": null,
+        "multiplexed": false,
+        "number_of_points": 1,
+        "repeats": 200
+    }
+}

@@ -1,0 +1,52 @@
+{
+    "ds": "./ds.h5",
+    "figs": {},
+    "results": {},
+    "analyze_results": {
+        "q0": {
+            "center": "./arrays.npz#analyze_results.q0.center",
+            "axes": "./arrays.npz#analyze_results.q0.axes",
+            "rotation_matrix": "./arrays.npz#analyze_results.q0.rotation_matrix",
+            "volume": 0.08541191242758234,
+            "shortest_distance_stats": [
+                -0.0013575211431070611,
+                0.0030464489842429287
+            ],
+            "theta_stats": [
+                0.5678110188262466,
+                0.3687101894026919
+            ],
+            "phi_stats": [
+                0.1238500491133211,
+                0.761168813738942
+            ],
+            "fidelity_stats": [
+                0.6447719433699364,
+                0.0944759448676381
+            ],
+            "trace_distance_stats": [
+                0.36870839111809045,
+                0.09203506043444988
+            ]
+        }
+    },
+    "figure_Bloch_vector": "./figure_Bloch_vector.png",
+    "figure_short_distance": "./figure_short_distance.png",
+    "figure_error": "./figure_error.png",
+    "initial_parameters": {
+        "qubits": [
+            "q0"
+        ],
+        "num_runs": 10000,
+        "reset_type_thermal_or_active": "active",
+        "flux_point_joint_or_independent": "joint",
+        "interaction_time_ns": 106,
+        "simulate": false,
+        "simulation_duration_ns": 1000,
+        "timeout": 100,
+        "load_data_id": null,
+        "multiplexed": false,
+        "number_of_points": 1,
+        "repeats": 200
+    }
+}

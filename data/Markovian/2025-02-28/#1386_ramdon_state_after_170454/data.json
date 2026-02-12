@@ -1,0 +1,25 @@
+{
+    "ds": "./ds.h5",
+    "figs": {},
+    "results": {},
+    "figure_Bloch": "./figure_Bloch.png",
+    "figure_counts": "./figure_counts.png",
+    "figure_mitigated_counts": "./figure_mitigated_counts.png",
+    "initial_parameters": {
+        "qubits": [
+            "q0"
+        ],
+        "num_runs": 10000,
+        "reset_type_thermal_or_active": "active",
+        "flux_point_joint_or_independent": "joint",
+        "simulate": false,
+        "simulation_duration_ns": 2500,
+        "timeout": 100,
+        "load_data_id": null,
+        "multiplexed": false,
+        "desired_state": [
+            1.5707963267948966,
+            0.0
+        ]
+    }
+}

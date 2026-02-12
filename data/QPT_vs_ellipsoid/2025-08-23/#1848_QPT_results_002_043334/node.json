@@ -1,0 +1,179 @@
+{
+    "created_at": "2025-08-23T04:33:34+08:00",
+    "metadata": {
+        "description": null,
+        "run_start": "2025-08-23T04:33:25.935+08:00",
+        "run_end": "2025-08-23T04:33:34.791+08:00",
+        "name": "QPT_results_002",
+        "data_path": "2025-08-23/#1848_QPT_results_002_043334"
+    },
+    "data": {
+        "parameters": {
+            "model": {
+                "qubits": [
+                    "q0"
+                ],
+                "alpha": 1.08,
+                "num_runs": 10000,
+                "reset_type_thermal_or_active": "active",
+                "flux_point_joint_or_independent": "joint",
+                "simulate": false,
+                "simulation_duration_ns": 2500,
+                "timeout": 100,
+                "load_data_id": null,
+                "multiplexed": false,
+                "desired_state": [
+                    [
+                        0.0,
+                        0.0
+                    ],
+                    [
+                        3.141592653589793,
+                        0.0
+                    ],
+                    [
+                        1.5707963267948966,
+                        0.0
+                    ],
+                    [
+                        1.5707963267948966,
+                        1.5707963267948966
+                    ]
+                ],
+                "operation_name": "id"
+            },
+            "schema": {
+                "additionalProperties": false,
+                "properties": {
+                    "qubits": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": [
+                            "q0"
+                        ],
+                        "title": "Qubits"
+                    },
+                    "alpha": {
+                        "default": 1.0,
+                        "title": "Alpha",
+                        "type": "number"
+                    },
+                    "num_runs": {
+                        "default": 10000,
+                        "title": "Num Runs",
+                        "type": "integer"
+                    },
+                    "reset_type_thermal_or_active": {
+                        "default": "active",
+                        "enum": [
+                            "thermal",
+                            "active"
+                        ],
+                        "title": "Reset Type Thermal Or Active",
+                        "type": "string"
+                    },
+                    "flux_point_joint_or_independent": {
+                        "default": "joint",
+                        "enum": [
+                            "joint",
+                            "independent"
+                        ],
+                        "title": "Flux Point Joint Or Independent",
+                        "type": "string"
+                    },
+                    "simulate": {
+                        "default": false,
+                        "title": "Simulate",
+                        "type": "boolean"
+                    },
+                    "simulation_duration_ns": {
+                        "default": 2500,
+                        "title": "Simulation Duration Ns",
+                        "type": "integer"
+                    },
+                    "timeout": {
+                        "default": 100,
+                        "title": "Timeout",
+                        "type": "integer"
+                    },
+                    "load_data_id": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Load Data Id"
+                    },
+                    "multiplexed": {
+                        "default": false,
+                        "title": "Multiplexed",
+                        "type": "boolean"
+                    },
+                    "desired_state": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "items": {
+                                        "type": "number"
+                                    },
+                                    "type": "array"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": [
+                            [
+                                0,
+                                0
+                            ],
+                            [
+                                3.141592653589793,
+                                0
+                            ],
+                            [
+                                1.5707963267948966,
+                                0
+                            ],
+                            [
+                                1.5707963267948966,
+                                1.5707963267948966
+                            ]
+                        ],
+                        "title": "Desired State"
+                    },
+                    "operation_name": {
+                        "default": "id",
+                        "title": "Operation Name",
+                        "type": "string"
+                    }
+                },
+                "title": "Parameters",
+                "type": "object"
+            }
+        },
+        "outcomes": {
+            "q0": "successful"
+        },
+        "quam": "./quam_state"
+    },
+    "id": 1848,
+    "parents": [
+        1847
+    ]
+}

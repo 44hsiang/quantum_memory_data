@@ -1,0 +1,147 @@
+{
+    "created_at": "2025-02-28T15:52:50+08:00",
+    "metadata": {
+        "name": "ramsey_long2",
+        "data_path": "2025-02-28/#1366_ramsey_long2_155250"
+    },
+    "data": {
+        "quam": "./quam_state.json",
+        "parameters": {
+            "model": {
+                "qubits": [
+                    "q0"
+                ],
+                "multiplexed": false,
+                "flux_point_joint_or_independent": "joint",
+                "num_averages": 500,
+                "frequency_detuning_in_mhz": 0.5,
+                "min_wait_time_in_ns": 16,
+                "max_wait_time_in_ns": 15000,
+                "num_time_points": 500,
+                "log_or_linear_sweep": "log",
+                "use_state_discrimination": false,
+                "timeout": 100,
+                "load_data_id": null,
+                "simulate": false,
+                "simulation_duration_ns": 2500,
+                "use_waveform_report": false
+            },
+            "schema": {
+                "properties": {
+                    "qubits": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": [
+                            "q0"
+                        ],
+                        "title": "Qubits"
+                    },
+                    "multiplexed": {
+                        "default": false,
+                        "description": "Play control, readout and reset aligned and in parallel for all qubits",
+                        "title": "Multiplexed",
+                        "type": "boolean"
+                    },
+                    "flux_point_joint_or_independent": {
+                        "default": "joint",
+                        "enum": [
+                            "joint",
+                            "independent"
+                        ],
+                        "title": "Flux Point Joint Or Independent",
+                        "type": "string"
+                    },
+                    "num_averages": {
+                        "default": 500,
+                        "title": "Num Averages",
+                        "type": "integer"
+                    },
+                    "frequency_detuning_in_mhz": {
+                        "default": 0.5,
+                        "title": "Frequency Detuning In Mhz",
+                        "type": "number"
+                    },
+                    "min_wait_time_in_ns": {
+                        "default": 16,
+                        "title": "Min Wait Time In Ns",
+                        "type": "integer"
+                    },
+                    "max_wait_time_in_ns": {
+                        "default": 10000,
+                        "title": "Max Wait Time In Ns",
+                        "type": "integer"
+                    },
+                    "num_time_points": {
+                        "default": 500,
+                        "title": "Num Time Points",
+                        "type": "integer"
+                    },
+                    "log_or_linear_sweep": {
+                        "default": "log",
+                        "enum": [
+                            "log",
+                            "linear"
+                        ],
+                        "title": "Log Or Linear Sweep",
+                        "type": "string"
+                    },
+                    "use_state_discrimination": {
+                        "default": false,
+                        "title": "Use State Discrimination",
+                        "type": "boolean"
+                    },
+                    "timeout": {
+                        "default": 100,
+                        "title": "Timeout",
+                        "type": "integer"
+                    },
+                    "load_data_id": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Load Data Id"
+                    },
+                    "simulate": {
+                        "default": false,
+                        "description": "Simulate the waveforms on the OPX instead of executing the program",
+                        "title": "Simulate",
+                        "type": "boolean"
+                    },
+                    "simulation_duration_ns": {
+                        "default": 2500,
+                        "description": "Duration over which the simulation will collect samples",
+                        "title": "Simulation Duration Ns",
+                        "type": "integer"
+                    },
+                    "use_waveform_report": {
+                        "default": false,
+                        "description": "Whether to use the interactive waveform report in simulation",
+                        "title": "Use Waveform Report",
+                        "type": "boolean"
+                    }
+                },
+                "title": "Parameters",
+                "type": "object"
+            }
+        }
+    },
+    "id": 1366,
+    "parents": [
+        1365
+    ]
+}
