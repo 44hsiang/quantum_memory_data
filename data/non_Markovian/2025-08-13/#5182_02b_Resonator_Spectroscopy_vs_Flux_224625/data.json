@@ -1,0 +1,58 @@
+{
+    "ds": "./ds.h5",
+    "fit_results": {
+        "q0": {
+            "resonator_frequency": "./arrays.npz#fit_results.q0.resonator_frequency",
+            "min_offset": -0.2405861091076536,
+            "offset": 0.04065625245016979,
+            "dv_phi0": 0.5624847231156468,
+            "m_pH": 1.8382721476817951
+        },
+        "q1": {
+            "resonator_frequency": "./arrays.npz#fit_results.q1.resonator_frequency",
+            "min_offset": -0.08614931641876475,
+            "offset": 0.0730461141626951,
+            "dv_phi0": 0.3183908611629197,
+            "m_pH": 3.247580650472581
+        },
+        "q2": {
+            "resonator_frequency": "./arrays.npz#fit_results.q2.resonator_frequency",
+            "min_offset": -0.12571581085104813,
+            "offset": 0.04765554744389718,
+            "dv_phi0": 0.34674271658989064,
+            "m_pH": 2.982038123739342
+        },
+        "q3": {
+            "resonator_frequency": "./arrays.npz#fit_results.q3.resonator_frequency",
+            "min_offset": -0.1696276656568573,
+            "offset": 0.031492252885921106,
+            "dv_phi0": 0.40223983708555683,
+            "m_pH": 2.570605655302279
+        },
+        "q4": {
+            "resonator_frequency": "./arrays.npz#fit_results.q4.resonator_frequency",
+            "min_offset": -0.13352987498746036,
+            "offset": 0.06169163138554017,
+            "dv_phi0": 0.3904430127460011,
+            "m_pH": 2.648273797315099
+        }
+    },
+    "figure": "./figure.png",
+    "initial_parameters": {
+        "qubits": null,
+        "num_averages": 30,
+        "min_flux_offset_in_v": -0.4,
+        "max_flux_offset_in_v": 0.4,
+        "num_flux_points": 201,
+        "frequency_span_in_mhz": 10,
+        "frequency_step_in_mhz": 0.1,
+        "flux_point_joint_or_independent": "joint",
+        "input_line_impedance_in_ohm": 50,
+        "line_attenuation_in_db": 20,
+        "update_flux_min": false,
+        "simulate": false,
+        "simulation_duration_ns": 2500,
+        "timeout": 100,
+        "load_data_id": null
+    }
+}

@@ -1,0 +1,173 @@
+{
+    "created_at": "2025-08-13T23:32:55+08:00",
+    "metadata": {
+        "description": null,
+        "run_start": "2025-08-13T23:32:48.278+08:00",
+        "run_end": "2025-08-13T23:32:54.996+08:00",
+        "name": "110a_quantum_process_tomography_iswap_96ns",
+        "data_path": "2025-08-13/#5299_110a_quantum_process_tomography_iswap_96ns_233255"
+    },
+    "data": {
+        "quam": "./quam_state.json",
+        "parameters": {
+            "model": {
+                "qubits": [
+                    "q0"
+                ],
+                "num_runs": 10000,
+                "reset_type_thermal_or_active": "active",
+                "flux_point_joint_or_independent": "joint",
+                "simulate": false,
+                "simulation_duration_ns": 10000,
+                "timeout": 100,
+                "load_data_id": null,
+                "multiplexed": false,
+                "interaction_time_ns": 96,
+                "desired_state": [
+                    [
+                        0.0,
+                        0.0
+                    ],
+                    [
+                        3.141592653589793,
+                        0.0
+                    ],
+                    [
+                        1.5707963267948966,
+                        0.0
+                    ],
+                    [
+                        1.5707963267948966,
+                        1.5707963267948966
+                    ]
+                ]
+            },
+            "schema": {
+                "additionalProperties": false,
+                "properties": {
+                    "qubits": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": [
+                            "q0"
+                        ],
+                        "title": "Qubits"
+                    },
+                    "num_runs": {
+                        "default": 10000,
+                        "title": "Num Runs",
+                        "type": "integer"
+                    },
+                    "reset_type_thermal_or_active": {
+                        "default": "active",
+                        "enum": [
+                            "thermal",
+                            "active"
+                        ],
+                        "title": "Reset Type Thermal Or Active",
+                        "type": "string"
+                    },
+                    "flux_point_joint_or_independent": {
+                        "default": "joint",
+                        "enum": [
+                            "joint",
+                            "independent"
+                        ],
+                        "title": "Flux Point Joint Or Independent",
+                        "type": "string"
+                    },
+                    "simulate": {
+                        "default": false,
+                        "title": "Simulate",
+                        "type": "boolean"
+                    },
+                    "simulation_duration_ns": {
+                        "default": 10000,
+                        "title": "Simulation Duration Ns",
+                        "type": "integer"
+                    },
+                    "timeout": {
+                        "default": 100,
+                        "title": "Timeout",
+                        "type": "integer"
+                    },
+                    "load_data_id": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Load Data Id"
+                    },
+                    "multiplexed": {
+                        "default": false,
+                        "title": "Multiplexed",
+                        "type": "boolean"
+                    },
+                    "interaction_time_ns": {
+                        "default": 96,
+                        "title": "Interaction Time Ns",
+                        "type": "integer"
+                    },
+                    "desired_state": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "items": {
+                                        "type": "number"
+                                    },
+                                    "type": "array"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": [
+                            [
+                                0,
+                                0
+                            ],
+                            [
+                                3.141592653589793,
+                                0
+                            ],
+                            [
+                                1.5707963267948966,
+                                0
+                            ],
+                            [
+                                1.5707963267948966,
+                                1.5707963267948966
+                            ]
+                        ],
+                        "title": "Desired State"
+                    }
+                },
+                "title": "Parameters",
+                "type": "object"
+            }
+        },
+        "outcomes": {
+            "q0": "successful"
+        }
+    },
+    "id": 5299,
+    "parents": [
+        5298
+    ]
+}

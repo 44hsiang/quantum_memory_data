@@ -1,0 +1,231 @@
+{
+    "ds": "./ds.h5",
+    "figs": {
+        "q0_|0>": "./figs.q0_|0>.png",
+        "q0_|1>": "./figs.q0_|1>.png",
+        "q0_|+>": "./figs.q0_|+>.png",
+        "q0_i|+>": "./figs.q0_i|+>.png"
+    },
+    "results": {
+        "q0": {
+            "|0>": {
+                "raw": {
+                    "x": [
+                        4651,
+                        5349
+                    ],
+                    "y": [
+                        4775,
+                        5225
+                    ],
+                    "z": [
+                        7688,
+                        2312
+                    ],
+                    "Bloch vector": [
+                        -0.0698,
+                        -0.045,
+                        0.5376
+                    ],
+                    "denstiy matrix": "./arrays.npz#results.q0.|0>.raw.denstiy matrix",
+                    "fidelity": 0.7687999999999999,
+                    "trace_distance": 0.2348993401438157
+                },
+                "mitigated": {
+                    "x": [
+                        0.6069861009509876,
+                        0.39301389904901257
+                    ],
+                    "y": [
+                        0.6296634967081199,
+                        0.37033650329188
+                    ],
+                    "z": [
+                        1.0,
+                        0
+                    ],
+                    "Bloch vector": [
+                        0.214,
+                        0.2593,
+                        1.0
+                    ],
+                    "denstiy matrix": "./arrays.npz#results.q0.|0>.mitigated.denstiy matrix",
+                    "fidelity": 1.0,
+                    "trace_distance": 0.16810308794091655
+                }
+            },
+            "|1>": {
+                "raw": {
+                    "x": [
+                        4721,
+                        5279
+                    ],
+                    "y": [
+                        4434,
+                        5566
+                    ],
+                    "z": [
+                        3910,
+                        6090
+                    ],
+                    "Bloch vector": [
+                        -0.0558,
+                        -0.1132,
+                        -0.218
+                    ],
+                    "denstiy matrix": "./arrays.npz#results.q0.|1>.raw.denstiy matrix",
+                    "fidelity": 0.609,
+                    "trace_distance": 0.39605930111537585
+                },
+                "mitigated": {
+                    "x": [
+                        0.6197878566203365,
+                        0.3802121433796636
+                    ],
+                    "y": [
+                        0.5673006583760059,
+                        0.4326993416239941
+                    ],
+                    "z": [
+                        0.4714703730797366,
+                        0.5285296269202634
+                    ],
+                    "Bloch vector": [
+                        0.2396,
+                        0.1346,
+                        -0.0571
+                    ],
+                    "denstiy matrix": "./arrays.npz#results.q0.|1>.mitigated.denstiy matrix",
+                    "fidelity": 0.5285296269202634,
+                    "trace_distance": 0.4910833146254148
+                }
+            },
+            "|+>": {
+                "raw": {
+                    "x": [
+                        5976,
+                        4024
+                    ],
+                    "y": [
+                        4016,
+                        5984
+                    ],
+                    "z": [
+                        5665,
+                        4335
+                    ],
+                    "Bloch vector": [
+                        0.1952,
+                        -0.1968,
+                        0.133
+                    ],
+                    "denstiy matrix": "./arrays.npz#results.q0.|+>.raw.denstiy matrix",
+                    "fidelity": 0.5975999999999999,
+                    "trace_distance": 0.41955997187529703
+                },
+                "mitigated": {
+                    "x": [
+                        0.8493050475493782,
+                        0.15069495245062176
+                    ],
+                    "y": [
+                        0.4908558888076079,
+                        0.5091441111923921
+                    ],
+                    "z": [
+                        0.7924286759326994,
+                        0.20757132406730067
+                    ],
+                    "Bloch vector": [
+                        0.6986,
+                        -0.0183,
+                        0.5849
+                    ],
+                    "denstiy matrix": "./arrays.npz#results.q0.|+>.mitigated.denstiy matrix",
+                    "fidelity": 0.8493050475493782,
+                    "trace_distance": 0.32910046182183594
+                }
+            },
+            "i|+>": {
+                "raw": {
+                    "x": [
+                        5193,
+                        4807
+                    ],
+                    "y": [
+                        5522,
+                        4478
+                    ],
+                    "z": [
+                        5814,
+                        4186
+                    ],
+                    "Bloch vector": [
+                        0.0386,
+                        0.1044,
+                        0.1628
+                    ],
+                    "denstiy matrix": "./arrays.npz#results.q0.i|+>.raw.denstiy matrix",
+                    "fidelity": 0.5522,
+                    "trace_distance": 0.4555472423360721
+                },
+                "mitigated": {
+                    "x": [
+                        0.7061082662765178,
+                        0.2938917337234822
+                    ],
+                    "y": [
+                        0.766276517922458,
+                        0.233723482077542
+                    ],
+                    "z": [
+                        0.8196781272860278,
+                        0.18032187271397226
+                    ],
+                    "Bloch vector": [
+                        0.4122,
+                        0.5326,
+                        0.6394
+                    ],
+                    "denstiy matrix": "./arrays.npz#results.q0.i|+>.mitigated.denstiy matrix",
+                    "fidelity": 0.766276517922458,
+                    "trace_distance": 0.44643184089742616
+                }
+            },
+            "superoperator": "./arrays.npz#results.q0.superoperator",
+            "mitigated superoperator": "./arrays.npz#results.q0.mitigated superoperator"
+        }
+    },
+    "initial_parameters": {
+        "qubits": [
+            "q0"
+        ],
+        "num_runs": 10000,
+        "reset_type_thermal_or_active": "active",
+        "flux_point_joint_or_independent": "joint",
+        "simulate": false,
+        "simulation_duration_ns": 10000,
+        "timeout": 100,
+        "load_data_id": null,
+        "multiplexed": false,
+        "interaction_time_ns": 15,
+        "desired_state": [
+            [
+                0,
+                0
+            ],
+            [
+                3.141592653589793,
+                0
+            ],
+            [
+                1.5707963267948966,
+                0
+            ],
+            [
+                1.5707963267948966,
+                1.5707963267948966
+            ]
+        ]
+    }
+}

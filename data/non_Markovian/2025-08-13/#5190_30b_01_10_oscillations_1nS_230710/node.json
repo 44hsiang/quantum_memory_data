@@ -1,0 +1,142 @@
+{
+    "created_at": "2025-08-13T23:07:10+08:00",
+    "metadata": {
+        "description": null,
+        "run_start": "2025-08-13T22:58:35.016+08:00",
+        "run_end": "2025-08-13T23:07:10.300+08:00",
+        "name": "30b_01_10_oscillations_1nS",
+        "data_path": "2025-08-13/#5190_30b_01_10_oscillations_1nS_230710"
+    },
+    "data": {
+        "quam": "./quam_state.json",
+        "parameters": {
+            "model": {
+                "qubit_pairs": [
+                    "q0_q2"
+                ],
+                "num_averages": 100,
+                "max_time_in_ns": 200,
+                "flux_point_joint_or_independent": "joint",
+                "reset_type": "thermal",
+                "simulate": false,
+                "timeout": 100,
+                "method": "fine",
+                "amp_range_coarse": 0.5,
+                "amp_step_coarse": 0.005,
+                "amp_range_fine": 0.15,
+                "amp_step_fine": 0.002,
+                "load_data_id": null
+            },
+            "schema": {
+                "additionalProperties": false,
+                "properties": {
+                    "qubit_pairs": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": [
+                            "q0_q2"
+                        ],
+                        "title": "Qubit Pairs"
+                    },
+                    "num_averages": {
+                        "default": 100,
+                        "title": "Num Averages",
+                        "type": "integer"
+                    },
+                    "max_time_in_ns": {
+                        "default": 200,
+                        "title": "Max Time In Ns",
+                        "type": "integer"
+                    },
+                    "flux_point_joint_or_independent": {
+                        "default": "joint",
+                        "enum": [
+                            "joint",
+                            "independent"
+                        ],
+                        "title": "Flux Point Joint Or Independent",
+                        "type": "string"
+                    },
+                    "reset_type": {
+                        "default": "thermal",
+                        "enum": [
+                            "active",
+                            "thermal"
+                        ],
+                        "title": "Reset Type",
+                        "type": "string"
+                    },
+                    "simulate": {
+                        "default": false,
+                        "title": "Simulate",
+                        "type": "boolean"
+                    },
+                    "timeout": {
+                        "default": 100,
+                        "title": "Timeout",
+                        "type": "integer"
+                    },
+                    "method": {
+                        "default": "fine",
+                        "enum": [
+                            "coarse",
+                            "fine"
+                        ],
+                        "title": "Method",
+                        "type": "string"
+                    },
+                    "amp_range_coarse": {
+                        "default": 0.5,
+                        "title": "Amp Range Coarse",
+                        "type": "number"
+                    },
+                    "amp_step_coarse": {
+                        "default": 0.005,
+                        "title": "Amp Step Coarse",
+                        "type": "number"
+                    },
+                    "amp_range_fine": {
+                        "default": 0.15,
+                        "title": "Amp Range Fine",
+                        "type": "number"
+                    },
+                    "amp_step_fine": {
+                        "default": 0.002,
+                        "title": "Amp Step Fine",
+                        "type": "number"
+                    },
+                    "load_data_id": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Load Data Id"
+                    }
+                },
+                "title": "Parameters",
+                "type": "object"
+            }
+        },
+        "outcomes": {
+            "q0_q2": "successful"
+        }
+    },
+    "id": 5190,
+    "parents": [
+        5189
+    ]
+}

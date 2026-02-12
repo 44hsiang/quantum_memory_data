@@ -1,0 +1,27 @@
+{
+    "ds": "./ds.h5",
+    "figs": {},
+    "results": {},
+    "figure_phase": "./figure_phase.png",
+    "figure_Bloch_vector": "./figure_Bloch_vector.png",
+    "initial_parameters": {
+        "qubits": [
+            "q0"
+        ],
+        "num_runs": 20000,
+        "min_wait_time_in_ns": 16,
+        "max_time_in_ns": 200,
+        "wait_time_step_in_ns": 4,
+        "reset_type_thermal_or_active": "active",
+        "flux_point_joint_or_independent": "joint",
+        "simulate": false,
+        "simulation_duration_ns": 2500,
+        "timeout": 100,
+        "load_data_id": null,
+        "multiplexed": false,
+        "desired_state": [
+            1.5707963267948966,
+            0
+        ]
+    }
+}
