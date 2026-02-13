@@ -5,9 +5,16 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "cvxpy>=1.7.5",
+    "ipykernel>=7.2.0",
+    "mosek>=11.1.5",
+    "pennylane>=0.44.0",
+    "picos>=2.6.2",
+    "qiskit-experiments>=0.13.0",
     "qualibrate==0.4.0",
-    "quam>=0.5.0a3",
+    "quam==0.5.0a2",
     "quam-libs",
+    "qutip>=5.2.3",
     "xarray>=2026.1.0",
 ]
 
