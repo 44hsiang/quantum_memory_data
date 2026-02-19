@@ -3,8 +3,8 @@ import numpy as np
 import cvxpy as cp
 from scipy.linalg import eigvalsh
 from quam_libs.quantum_memory.marcos import density_matrix_to_bloch_vector, dm_checker, bloch_vector_to_density_matrix
-from quam_libs.fit_ellipsoid import ls_ellipsoid, polyToParams3D
-from quam_libs.quantum_memory.EllipsoidTool import EllipsoidTool
+# from quam_libs.fit_ellipsoid import ls_ellipsoid, polyToParams3D
+# from quam_libs.quantum_memory.EllipsoidTool import EllipsoidTool
 from quam_libs.quantum_memory.CorrectBloch import CorrectBlochSphere,CorrectChoi
 from quam_libs.quantum_memory.entanglement_robustness import entanglementRobustness
 #matplotlib.use('TkAgg')

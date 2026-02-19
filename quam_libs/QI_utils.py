@@ -1,4 +1,4 @@
-from scipy.linalg import eigvalsh
+from scipy.linalg import eigvalsh, svd
 import numpy as np
 import cvxpy as cp
 
@@ -18,6 +18,83 @@ def density_matrix_to_bloch_vector(rho):
     r_y = np.real(np.trace(rho @ sigma_y))
     r_z = np.real(np.trace(rho @ sigma_z))
     return np.array([r_x, r_y, r_z])
+
+
+class QuantumStateAnalysis:
+    
+    """
+    Define a class for analyzing quantum states. 
+    Rho and sigma are experimental and ideal density matrices, respectively.
+
+    Parameters:
+        measurement_data (list): [x, y, z] - Experimental Bloch vector components.
+        ideal_data (list): [theta, phi] - Ideal Bloch vector parameters.
+    """
+
+    def __init__(self, measurement_data, ideal_data):
+        self.x, self.y, self.z = measurement_data
+        self.ideal_theta, self.ideal_phi = ideal_data
+
+        self.theta, self.phi = self.theta_phi()
+        self.bloch_vector = [self.x, self.y, self.z]
+        self.ideal_bloch_vector = [
+            np.sin(self.ideal_theta) * np.cos(self.ideal_phi),
+            np.sin(self.ideal_theta) * np.sin(self.ideal_phi),
+            np.cos(self.ideal_theta)
+        ]
+
+        self.rho = bloch_vector_to_density_matrix(np.array(self.bloch_vector))
+        self.sigma = bloch_vector_to_density_matrix(np.array(self.ideal_bloch_vector))
+        self.measured_dm = self.rho
+        self.ideal_dm = self.sigma
+
+        self.fidelity = self.fidelity()
+        self.trace_distance = self.trace_distance()
+        
+
+    def theta_phi(self):
+        r = np.sqrt(self.x**2 + self.y**2 + self.z**2)
+        theta = np.arccos(self.z / 1)
+        phi = np.arctan2(self.y, self.x)
+        return theta, phi
+
+
+
+    def trace_distance(self):
+        # Difference of the matrices
+        delta = self.rho - self.sigma
+        
+        # Singular value decomposition
+        singular_values = svd(delta, compute_uv=False)
+        
+        # Trace norm is the sum of the singular values
+        trace_norm = np.sum(singular_values)
+        
+        # Trace distance
+        return 0.5 * trace_norm
+
+    def fidelity(self):
+        # rho is the measured density matrix, so it is mixed state
+        # sigma is the ideal density matrix, so it is pure state
+        fidelity = np.trace(self.rho @ self.sigma)
+        # Fidelity
+        return np.abs(fidelity)
+
+    def get_results(self):
+        return {
+            'theta': self.theta,
+            'phi': self.phi,
+            'bloch_vector': self.bloch_vector,
+            'ideal_bloch_vector': self.ideal_bloch_vector,
+            'ideal_dm': self.sigma,
+            'measured_dm': self.rho,
+            'fidelity': self.fidelity(),
+            'trace_distance': self.trace_distance()
+        }
+
+    
+
+
 
 #quantum memory 
 from qutip import Qobj
@@ -96,243 +173,116 @@ class CorrectBloch:
         return corrected_dm, corrected_bloch
 
 class CorrectChoi:
-    """Correct and validate a 4x4 Choi state.
-
+    """Correct and validate a 4x4 Choi state via iterative CP/TP projection.
+    
     Usage
     -----
     cc = CorrectChoi(choi)
     corrected = cc.correct(max_iterations=100, tol=1e-8)
+    """
+    def __init__(self, dm):
+        self.dm = dm
 
-    After correction:
-    - cc.corrected_choi: corrected Choi matrix
-    - cc.n_corrections: number of projection steps used
-    - cc.is_valid_state: whether final state is valid CP/TP state
+    def dm_checker(self, tol=1e-8,print_reason=True):
+        """
+        Check if the density matrix is Hermitian, positive semi-definite, and has a trace of 1.
+        :param dm: Density matrix (2^nx2^n numpy array)
+        :param tol: Tolerance for numerical errors
+        :return: True if the density matrix is valid, False otherwise
+        """
+        is_hermitian = np.allclose(self.dm, self.dm.conj().T, atol=tol)
+        eigenvalues = eigvalsh(self.dm)
+        is_psd = np.all(eigenvalues >= -tol)
+        trace_is_one = abs(np.trace(self.dm) - 1) < tol
+
+        if is_hermitian and is_psd and trace_is_one:
+            return True
+        else:
+            if print_reason:
+                print("Density matrix is invalid:")
+                if not is_hermitian:
+                    print("❌ Density matrix is not Hermitian.")
+                if not is_psd:
+                    print("❌ Density matrix is not positive semi-definite. Eigenvalues:", eigenvalues)
+                if not trace_is_one:
+                    print(f"❌ Trace of the density matrix is not 1. Got trace = {np.trace(self.dm)}")
+            return False
+
+    def choi_checker(self,index=[1],repeat = 100, tol=1e-8, print_reason=True):
+        """
+        Check if the Choi state is valid.
+        :param tol: Tolerance for numerical errors
+        :return: True if the Choi state is valid, False otherwise
+        """
+        def trace_norm(rho,sigama):
+            dif = rho - sigama
+            evals = eigvalsh(dif)
+            return 0.5 * np.sum(np.abs(evals))
+        choi = self.dm.reshape(4, 4)
+        count = 0
+        for i in range(repeat):
+            count += 1
+            from pennylane.math import partial_trace
+            is_hermitian = np.allclose(choi, choi.conj().T, atol=tol)
+            eigenvalues = eigvalsh(choi)
+            is_psd = np.all(eigenvalues >= -tol)
+            trace_is_one = abs(np.trace(choi) - 1) < tol
+            pt = partial_trace(choi, indices=index)
+            pt_trace_is_one = trace_norm(pt,0.5*np.eye(2)) < tol
+            #pt_trace_is_one = trace_norm(pt,np.eye(2)) < tol
+
+            if is_hermitian and is_psd and trace_is_one and pt_trace_is_one:
+                print(f"After {count} iterations, the Choi state is valid.")
+                break
+            else:
+                print_reason = True if i == repeat - 1 else print_reason
+                if print_reason:
+                    print("Choi state is invalid:")
+                    if not is_hermitian:
+                        print("❌ Choi state is not Hermitian.")
+                    if not is_psd:
+                        print("❌ Choi state is not positive semi-definite. Eigenvalues:", eigenvalues)
+                    if not trace_is_one:
+                        print(f"❌ Trace of the Choi state is not 1. Got trace = {np.trace(choi)}")
+                    if not pt_trace_is_one:
+                        print(f"❌ Partial trace of the Choi state is not 1. Got trace = {trace_norm(pt,0.5*np.eye(2))}")
+            choi = CPTPProjector(choi).project_to_cp_tp()
+        return choi,count
+
+
+
+class CPTPProjector:
+    """
+    Correct the Choi state to ensure it follow
+    1. Hermitian
+    2. positive semi-definite
+    3. trace of 1.
+    4. partial trace out should be identity
     """
     def __init__(self, choi_state):
-        self.choi_state = np.array(choi_state, dtype=complex).reshape(4, 4)
-        self.corrected_choi = self.choi_state.copy()
-        self.n_corrections = 0
-        self.is_valid_state = False
+        "uncorrect_choi_state: List"
+        self.choi_state = np.array(choi_state).reshape(-1,4,4)
 
-    @staticmethod
-    def _partial_trace_out(choi, d=2):
-        # For a dxd channel Choi matrix of shape (d^2, d^2)
-        choi4 = np.asarray(choi).reshape(d, d, d, d)  # [i,k,j,l]
-        rho_in = np.zeros((d, d), dtype=complex)
-        for i in range(d):
-            rho_in += choi4[i, :, i, :]
-        return rho_in
-
-    @staticmethod
-    def _trace_norm(rho, sigma):
-        evals = eigvalsh(rho - sigma)
-        return 0.5 * np.sum(np.abs(evals))
-
-    def check_validity(self, choi=None, d=2, tol=1e-8, print_reason=False):
-        mat = self.corrected_choi if choi is None else np.asarray(choi).reshape(d * d, d * d)
-
-        is_hermitian = np.allclose(mat, mat.conj().T, atol=tol)
-        eigenvalues = eigvalsh(mat)
-        is_psd = np.all(eigenvalues >= -tol)
-        trace_is_one = abs(np.trace(mat) - 1) < tol
-
-        target = np.eye(d) / d
-        pt = self._partial_trace_out(mat, d=d)
-        pt_trace_is_one = self._trace_norm(pt, target) < tol
-
-        is_valid = bool(is_hermitian and is_psd and trace_is_one and pt_trace_is_one)
-
-        if (not is_valid) and print_reason:
-            print("Choi state is invalid:")
-            if not is_hermitian:
-                print("❌ Choi state is not Hermitian.")
-            if not is_psd:
-                print("❌ Choi state is not positive semi-definite. Eigenvalues:", eigenvalues)
-            if not trace_is_one:
-                print(f"❌ Trace of the Choi state is not 1. Got trace = {np.trace(mat)}")
-            if not pt_trace_is_one:
-                print(f"❌ Partial trace out is not I/d. distance = {self._trace_norm(pt, target)}")
-
-        return is_valid
-
-    def project_to_cp_tp(self, choi=None, d=2, solver=cp.SCS, use_soft_constraint=True):
-        """Project to CP/TP state with optional soft constraint on partial trace.
-        
-        Args:
-            choi: Choi matrix to project
-            d: qubit dimension (default 2)
-            solver: CVXPY solver (tries fallback: mosek → cvxopt → scs)
-            use_soft_constraint: If True, use soft constraint for partial trace (recommended)
-                If False, use hard constraint (may fail to converge)
-        """
-        ref_choi = self.corrected_choi if choi is None else np.asarray(choi).reshape(d * d, d * d)
-        X = cp.Variable((d * d, d * d), hermitian=True)
-
+    def project_to_cp_tp(self, d=2):
+        X = cp.Variable((d*d, d*d), hermitian=True)                         # Hermitian variable
+        # put in marcos in future
         def ptrace_out_cp(X, d_in=2, d_out=2):
-            X4 = cp.reshape(X, (d_out, d_in, d_out, d_in), order='C')   # [i,k,j,l]
+            X4 = cp.reshape(X, (d_out, d_in, d_out, d_in))   # [i,k,j,l]
             rho_in = 0
             for i in range(d_out):
                 rho_in += X4[i, :, i, :]
             return rho_in
-
-        pt_target = np.eye(d) / d
-        
-        if use_soft_constraint:
-            # Use soft constraint: minimize ||ptrace_out(X) - I/d||_F^2
-            # This allows the optimization to balance all constraints
-            pt_deviation = ptrace_out_cp(X, d_in=d, d_out=d) - pt_target
-            objective = cp.Minimize(
-                cp.norm(X - ref_choi, 'fro') + 0.1 * cp.norm(pt_deviation, 'fro')
-            )
-            constraints = [
-                X >> 0,
-                cp.trace(X) == 1,
-            ]
-        else:
-            # Hard constraint (original approach)
-            objective = cp.Minimize(cp.norm(X - ref_choi, 'fro'))
-            constraints = [
-                X >> 0,
-                cp.trace(X) == 1,
-                ptrace_out_cp(X, d_in=d, d_out=d) == pt_target,
-            ]
-
-        prob = cp.Problem(objective, constraints)
-        
-        # Solver fallback strategy
-        solvers_to_try = [solver]
-        if solver != cp.SCS:
-            solvers_to_try.append(cp.SCS)
-        
-        result = None
-        for solver_option in solvers_to_try:
-            try:
-                prob.solve(solver=solver_option, verbose=False)
-                if prob.status in ("optimal", "optimal_inaccurate"):
-                    result = np.asarray(X.value)
-                    break
-            except:
-                continue
-        
-        if result is None:
-            raise RuntimeError(f"Projection failed with all solvers. Status: {prob.status}")
-
-        return result
-
-    def correct(self, max_iterations=100, d=2, tol=1e-4, print_reason=True, solver=cp.SCS):
-        """Iteratively correct Choi state to valid CP state, relaxing constraints as needed.
-        
-        Strategy:
-        1. Try strict CP/TP constraints (both PSD and partial trace == I/d)
-        2. If fails, relax to CP constraint only (PSD + trace = 1)
-        3. Return the best result (either valid or best attempt)
-        
-        Args:
-            max_iterations: Maximum number of projection iterations
-            d: Qubit dimension (default 2)
-            tol: Tolerance for validity check
-            print_reason: Print detailed validation messages
-            solver: CVXPY solver to use
-        
-        Returns:
-            Corrected Choi matrix
-        """
-        choi = self.corrected_choi.copy()
-        count = 0
-        
-        # First, try to satisfy all constraints (CP + TP)
-        for _ in range(max_iterations):
-            if self.check_validity(choi=choi, d=d, tol=tol, print_reason=False):
-                self.corrected_choi = choi
-                self.n_corrections = count
-                self.is_valid_state = True
-                if print_reason:
-                    print(f"✓ Choi state is valid (CP+TP) after {count} correction(s).")
-                return self.corrected_choi
-
-            try:
-                choi = self.project_to_cp_tp(choi=choi, d=d, solver=solver, use_soft_constraint=True)
-            except Exception as e:
-                if print_reason:
-                    print(f"  Note: CP+TP projection step {count} encountered issue: {type(e).__name__}")
-                break
-                
-            count += 1
-
-        # If strict CP+TP fails, try CP constraint only (weaker but more achievable)
-        if not self.is_valid_state:
-            if print_reason:
-                print(f"Could not achieve CP+TP after {count} iterations. Trying CP-only correction...")
-            
-            choi_cp_only = self.corrected_choi.copy()
-            count_cp = 0
-            
-            for _ in range(max_iterations // 2):
-                # Check if it's at least a valid CP state (PSD + trace = 1)
-                evals = eigvalsh(choi_cp_only)
-                is_psd = np.all(evals >= -tol)
-                is_trace_one = abs(np.trace(choi_cp_only) - 1) < tol
-                
-                if is_psd and is_trace_one:
-                    self.corrected_choi = choi_cp_only
-                    self.n_corrections = count + count_cp
-                    self.is_valid_state = False  # Mark as partially valid
-                    if print_reason:
-                        print(f"✓ Achieved valid CP state after {count + count_cp} corrections (TP not satisfied)")
-                    return self.corrected_choi
-                
-                try:
-                    # Simple projection to PSD + normalized
-                    choi_cp_only = self._project_to_cp_only(choi_cp_only, d=d)
-                except:
-                    break
-                    
-                count_cp += 1
-
-        # Final result (whether valid or best attempt)
-        self.corrected_choi = choi
-        self.n_corrections = count
-        self.is_valid_state = self.check_validity(choi=choi, d=d, tol=tol, print_reason=False)
-
-        if print_reason:
-            evals = eigvalsh(choi)
-            trace_val = np.trace(choi)
-            pt = self._partial_trace_out(choi, d=d)
-            pt_error = self._trace_norm(pt, np.eye(d) / d)
-            
-            if self.is_valid_state:
-                print(f"✓ Choi state is fully valid after {count} iterations.")
-            else:
-                print(f"⚠ Choi state is partially corrected after {count} iterations:")
-                print(f"  - PSD: {np.all(evals >= -1e-8)}")
-                print(f"  - Trace=1: {abs(trace_val - 1) < 1e-8}")
-                print(f"  - TP (partial trace error): {pt_error:.3e}")
-                print(f"  Consider this as 'best effort' for non-ideal channels")
-
-        return self.corrected_choi
-    
-    def _project_to_cp_only(self, choi, d=2):
-        """Simple projection to CP state (PSD + normalized) without TP constraint."""
-        X = cp.Variable((d * d, d * d), hermitian=True)
-        
-        objective = cp.Minimize(cp.norm(X - choi, 'fro'))
+        # find matrix X that minimizes the trace distance to choi_state
+        objective = cp.Minimize(cp.norm(X - self.choi_state, 'fro'))
         constraints = [
-            X >> 0,
-            cp.trace(X) == 1,
-        ]
-        
-        prob = cp.Problem(objective, constraints)
-        prob.solve(solver=cp.SCS, verbose=False)
-        
-        if prob.status not in ("optimal", "optimal_inaccurate"):
-            raise RuntimeError(f"CP projection failed: {prob.status}")
-        
-        return np.asarray(X.value)
+            X >> 1e-7,                                                  # positive semi-definite
+            ]
+        constraints += [ptrace_out_cp(X, d_in=d, d_out=d) == 0.5*np.eye(d)]  # Tr_out(X) = I_d
 
-    @property
-    def result(self):
-        return {
-            "corrected_choi": self.corrected_choi,
-            "n_corrections": self.n_corrections,
-            "is_valid_state": self.is_valid_state,
-        }
+        prob = cp.Problem(objective, constraints)
+        prob.solve(solver=cp.SCS)   # 或 'CVXOPT' / 'MOSEK'
+
+        if prob.status not in ("optimal", "optimal_inaccurate"):
+            raise RuntimeError("Projection failed:", prob.status)
+
+        return X.value
