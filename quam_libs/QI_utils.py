@@ -19,6 +19,17 @@ def density_matrix_to_bloch_vector(rho):
     r_z = np.real(np.trace(rho @ sigma_z))
     return np.array([r_x, r_y, r_z])
 
+def angle_to_density_matrix(theta,phi):
+    c = np.cos(theta/2)
+    s = np.sin(theta/2)
+    e = np.exp(1j*phi)
+    return np.array([[c**2,c*s*np.conj(e)],[c*s*e,s**2]])
+
+def BR_density_matrix(theta, phi, T1,T2,t,detuning=0):
+    alpha = np.cos(theta/2)
+    beta = np.sin(theta/2)*np.exp(1j*phi)
+    return np.array([[1+(alpha**2-1)*np.exp(-t/T1),alpha*np.conj(beta)*np.exp(1j*detuning*t)*np.exp(-t/T2)],
+                    [np.conj(alpha)*beta*np.exp(-1j*detuning*t)*np.exp(-t/T2),beta*np.conj(beta)*np.exp(-t/T1)]])
 
 class QuantumStateAnalysis:
     
@@ -101,6 +112,7 @@ from qutip import Qobj
 from picos import Problem, value
 from picos.expressions.variables import HermitianVariable
 from picos.expressions.algebra import trace, partial_transpose
+
 def entanglementRobustness(state, solver='mosek', **extra_options) :
     if isinstance(state, Qobj):
         state = (state).full()

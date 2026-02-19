@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from .QI_utils import CorrectBloch, CorrectChoi, entanglementRobustness
 from .ellipsoid_utils.ellipsoid_utils import EllipsoidTool
+from .quantum_channel_utils import compute_choi_state, compute_memory_robustness
 import numpy as np
 
 @dataclass
@@ -11,6 +12,7 @@ class EllipsoidFitParameters:
     ransac_iterations: int = 1500
     random_state: int | None = 42
     correct_rotation_orientation: bool = False
+    find_best_order:bool = False
 
 class QuantumMemoryAnalyze:
     
@@ -22,9 +24,9 @@ class QuantumMemoryAnalyze:
         )
         self.corrected_dm, self.corrected_bloch = self.valid_data()
         self.ellipsoid_result = self.ellipsoid_fit_results()
-        self.choi = self.choi_state()
+        center, axes, R = self.ellipsoid_result['center'], self.ellipsoid_result['axes'], self.ellipsoid_result['rotation_matrix']
+        self.choi = self.choi_state(center, axes, R)
         self.memory_robustness = self.memory_robustness(self.choi)
-        #self.center, self.axes, self.R = self.elliipsoid_fit_results()['center'], self.ellipsoid_fit_results()['axes'], self.ellipsoid_fit_results()['rotation_matrix']
     def valid_data(self,method="manual"):
         """
         project measurement data to density matrix by using MLE,
@@ -80,48 +82,25 @@ class QuantumMemoryAnalyze:
         """   
         return self._build_ellipsoid_tool().plot(ax=ax, title=title)
 
-
-# quantum channel analysis
-    def choi_state(self):
-        center, axes, R = self.ellipsoid_result['center'], self.ellipsoid_result['axes'], self.ellipsoid_result['rotation_matrix']
-
-        pauli_matrices = [
-            np.eye(2, dtype=complex),
-            np.array([[0, 1], [1, 0]], dtype=complex),
-            np.array([[0, -1j], [1j, 0]], dtype=complex),
-            np.array([[1, 0], [0, -1]], dtype=complex)
-        ]
-        B = np.array(center)
-        radii = np.array(axes)
-        eigvecs = np.array(R)
-        # T maps Bloch vector components; convention kept from your original code.
-        T = np.diag(radii) @ eigvecs.T
-
-        chi = np.zeros((4, 4), dtype=complex)
-        chi[0, 0] = 1
-        chi[0, 1:4] = B
-        chi[1:4, 0] = B.conj()
-        chi[1:4, 1:4] = T
-        chi = (chi + chi.conj().T) / 2  # Hermitian
-
-        choi = np.zeros((4, 4), dtype=complex)
-        for i, Pi in enumerate(pauli_matrices):
-            for j, Pj in enumerate(pauli_matrices):
-                choi += chi[i, j] * np.kron(Pi, Pj)
-
-        choi = (choi + choi.conj().T) / 2
-        choi /= np.trace(choi)
-
-        # Correct the Choi state with relaxed tolerance for practical use
-        cc = CorrectChoi(choi)
-        corrected = cc.correct(max_iterations=100, tol=1e-4, print_reason=False)
-
-        return corrected
+    # quantum channel analysis
+    @staticmethod
+    def choi_state(center, axes, R):
+        """Compute the Choi state from ellipsoid parameters.
+        
+        Args:
+            center: Center of the ellipsoid (Bloch vector)
+            axes: Semi-axes of the ellipsoid
+            R: Rotation matrix of the ellipsoid
+            
+        Returns:
+            Corrected Choi matrix
+        """
+        return compute_choi_state(center, axes, R)
     
     @staticmethod
     def memory_robustness(choi):
         """Return the entanglement robustness of `choi`.
         Usage: `QuantumMemory.memory_robustness(choi)`.
         """
-        return float(entanglementRobustness(choi))
+        return compute_memory_robustness(choi)
 

@@ -1,5 +1,6 @@
 import numpy as np
 from .fit_ellipsoid import ls_ellipsoid, polyToParams3D
+from quam_libs.quantum_channel_utils import compute_choi_state, compute_memory_robustness
 
 
 class EllipsoidTool:
@@ -34,6 +35,7 @@ class EllipsoidTool:
         ransac_iterations=1000,
         random_state=None,
         correct_rotation_orientation=False,
+        find_best_order=False
     ):
         points = np.asarray(bloch_vector, dtype=float).reshape(-1, 3)
         if points.size == 0:
@@ -46,7 +48,7 @@ class EllipsoidTool:
         self.ransac_iterations = int(ransac_iterations)
         self.random_state = random_state
         self.correct_rotation_orientation = bool(correct_rotation_orientation)
-
+        self.find_best_order = bool(find_best_order)
         self.bloch_vector = points
         self.outliers = None
         self.ransac_coeff = None
@@ -160,6 +162,53 @@ class EllipsoidTool:
         else:
             return R, axes
 
+    
+    @staticmethod
+    def find_optimal_ellipsoid_configuration(eigenvalues, eigenvectors, center):
+        """
+        Iterates through all permutations of ellipsoid axes to find the configuration 
+        that yields the maximum quantum memory robustness.
+        
+        Args:
+            eigenvalues: 1D array of 3 eigenvalues (axes lengths).
+            eigenvectors: 3x3 matrix where columns are eigenvectors (rotation matrix).
+            center: 1D array of the ellipsoid center coordinates.
+            calc_robustness_func: A function that calculates and returns the robustness score.
+            
+        Returns:
+            best_rotation_matrix: The 3x3 eigenvector matrix corresponding to the best permutation.
+            best_axes: The 1D array of 3 eigenvalues corresponding to the best permutation.
+        """
+        import itertools
+        # Initialize variables to record the optimal results
+        best_robustness = -float('inf')
+        best_axes = None
+        best_rotation_matrix = None
+
+        # Generate all permutations of indices [0, 1, 2] (3! = 6 combinations)
+        indices = [0, 1, 2]
+        for p in itertools.permutations(indices):
+            p_list = list(p) 
+            
+            # 1. Reorder axes (eigenvalues)
+            current_axes = eigenvalues[p_list]
+            
+            # 2. Reorder rotation matrix (eigenvectors columns)
+            current_rotation_matrix = eigenvectors[:, p_list] 
+            if np.linalg.det(current_rotation_matrix) > 0:
+                current_rotation_matrix[:, 0] = -current_rotation_matrix[:, 0]
+            # 3. Calculate Robustness
+            choi = compute_choi_state(center, current_axes, current_rotation_matrix)
+            robustness = compute_memory_robustness(choi)
+            
+            # 4. Update the optimal configuration
+            if robustness > best_robustness:
+                best_robustness = robustness
+                best_axes = current_axes
+                best_rotation_matrix = current_rotation_matrix
+
+        return best_rotation_matrix, best_axes
+        
     @property
     def fit_results(self):
         """Compute fit results and print a readable summary.
@@ -185,6 +234,11 @@ class EllipsoidTool:
         # Apply rotation correction if enabled
         if self.correct_rotation_orientation:
             R, axes = self._correct_rotation_orientation(R, axes)
+            # Recalculate volume with corrected axes
+            volume = (4.0 / 3.0) * np.pi * axes[0] * axes[1] * axes[2]
+        
+        if self.find_best_order:
+            R, axes = self.find_optimal_ellipsoid_configuration(axes,R,center)
             # Recalculate volume with corrected axes
             volume = (4.0 / 3.0) * np.pi * axes[0] * axes[1] * axes[2]
         
