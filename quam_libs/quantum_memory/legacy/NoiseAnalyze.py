@@ -2,10 +2,11 @@ import numpy as np
 
 import cvxpy as cp
 from scipy.linalg import eigvalsh
-from quam_libs.quantum_memory.marcos import density_matrix_to_bloch_vector, dm_checker, bloch_vector_to_density_matrix
+from quam_libs.quantum_memory.legacy.marcos import density_matrix_to_bloch_vector, dm_checker, bloch_vector_to_density_matrix
 # from quam_libs.fit_ellipsoid import ls_ellipsoid, polyToParams3D
-# from quam_libs.quantum_memory.EllipsoidTool import EllipsoidTool
-from quam_libs.quantum_memory.CorrectBloch import CorrectBlochSphere,CorrectChoi
+
+from quam_libs.quantum_memory.legacy.EllipsoidTool import EllipsoidTool
+from quam_libs.quantum_memory.legacy.CorrectBloch import CorrectBlochSphere, CorrectChoi
 from quam_libs.quantum_memory.entanglement_robustness import entanglementRobustness
 #matplotlib.use('TkAgg')
 
@@ -46,13 +47,24 @@ class NoiseAnalyze:
         """
         Fit the ellipsoid from input data(Bloch vector)
         """
-        return EllipsoidTool(self.corrected_bloch,convex=self.ellipsoid_fit_parameters.convex,filter_method=self.ellipsoid_fit_parameters.filter_method,ransac_threshold=self.ellipsoid_fit_parameters.ransac_threshold,ransac_iterations=self.ellipsoid_fit_parameters.ransac_iterations).fit()
+        # Determine filter method based on convex flag if present
+        filter_method = self.ellipsoid_fit_parameters.filter_method
+        if hasattr(self.ellipsoid_fit_parameters, 'convex') and self.ellipsoid_fit_parameters.convex:
+            filter_method = 'convex'
+        
+        return EllipsoidTool(
+            self.corrected_bloch,
+            filter_method=filter_method,
+            ransac_threshold=self.ellipsoid_fit_parameters.ransac_threshold,
+            ransac_iterations=self.ellipsoid_fit_parameters.ransac_iterations
+        ).fit()
 
-    def ellipsoid_plot(self, ax=None,title=None,do_convex=True):
+    def ellipsoid_plot(self, ax=None, title=None, do_convex=True):
         """
         Plot the ellipsoid
         """   
-        return EllipsoidTool(self.corrected_bloch,convex=do_convex,filter_method='ransac').plot(ax=ax,title=title)
+        filter_method = 'convex' if do_convex else 'ransac'
+        return EllipsoidTool(self.corrected_bloch, filter_method=filter_method).plot(ax=ax, title=title)
 
 
 

@@ -2,7 +2,7 @@ import numpy as np
 import cvxpy as cp
 import matplotlib.pyplot as plt
 import matplotlib
-from quam_libs.quantum_memory.marcos import density_matrix_to_bloch_vector, bloch_vector_to_density_matrix
+from quam_libs.quantum_memory.legacy.marcos import density_matrix_to_bloch_vector, bloch_vector_to_density_matrix
 import warnings
 
 warnings.filterwarnings(

@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
-from quam_libs.fit_ellipsoid import ls_ellipsoid, polyToParams3D
+from quam_libs.legacy.fit_ellipsoid import ls_ellipsoid, polyToParams3D
 
 
 

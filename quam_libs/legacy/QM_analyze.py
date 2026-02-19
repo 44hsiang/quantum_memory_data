@@ -6,9 +6,9 @@ import qutip as qt
 from scipy.optimize import minimize
 from scipy.spatial import ConvexHull, cKDTree
 from scipy.linalg import eigvalsh
-from quam_libs.fit_ellipsoid import ls_ellipsoid, polyToParams3D
 import cvxpy as cp
 from itertools import permutations
+from quam_libs.legacy.fit_ellipsoid import ls_ellipsoid, polyToParams3D
 
 ## Helper functions
 def MLE(original_P,confusion_matrix):

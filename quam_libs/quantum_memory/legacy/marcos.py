@@ -209,6 +209,28 @@ def dm_checker(dm, tol=1e-8,print_reason=True):
                 print(f"❌ Trace of the density matrix is not 1. Got trace = {np.trace(dm)}")
         return False
 
+def dm_checker_dict(data_dict,name = 'data_dm', tolerance=1e-8, print_details=False):
+    bad_dict = {}
+    for key in data_dict.keys():
+        count = 0
+        index_list = []
+        for i in range(len(data_dict[key][name])):
+            data_check = dm_checker(data_dict[key][name][i],tol = tolerance,print_reason=print_details)
+            if data_check:
+                pass
+            else:
+                print(f"Density matrix[{i}] is not valid for {key}") if print_details else None
+                count += 1
+                index_list.append(i)
+        if print_details:
+            if count > 0 :
+                print(f"Total {count} valid point in Density matrix for {key}") 
+            if count == 0:
+                print(f"No errors in {name} and for {key}") 
+            print('-'*75)
+        bad_dict[key] = index_list
+    return bad_dict
+
 def diagnose_choi_states(choi_list,index, tol_pos=1e-10, tol_tp=1e-3):
     rows = []
     def trace_norm(rho,sigama):

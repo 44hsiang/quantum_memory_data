@@ -1,5 +1,5 @@
 from quam_libs.components import QuAM
-from quam_libs.quantum_memory.marcos import *
+from quam_libs.quantum_memory.legacy.marcos import *
 from quam_libs.analyzer import QuantumMemoryAnalyze, EllipsoidFitParameters
 from quam_libs.QI_utils import *
 
