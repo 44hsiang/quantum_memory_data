@@ -28,9 +28,9 @@ def error_gate(rho, readout_error):
 
     return err
 
-# quantum memroy analysis utility functions
-def compute_choi_state(center, axes, R):
-    """Compute the Choi state from ellipsoid parameters.
+# quantum memory analysis utility functions
+def compute_choi_state_raw(center, axes, R):
+    """Compute the Choi state from ellipsoid parameters WITHOUT correction (Legacy behavior).
     
     Args:
         center: Center of the ellipsoid (Bloch vector)
@@ -38,7 +38,7 @@ def compute_choi_state(center, axes, R):
         R: Rotation matrix of the ellipsoid
         
     Returns:
-        Corrected Choi matrix
+        Uncorrected Choi matrix (matching Legacy NoiseAnalyze behavior)
     """
     pauli_matrices = [
         np.eye(2, dtype=complex),
@@ -67,10 +67,27 @@ def compute_choi_state(center, axes, R):
     choi = (choi + choi.conj().T) / 2
     choi /= np.trace(choi)
 
-    # Correct the Choi state with relaxed tolerance for practical use
+    # Return uncorrected choi (correction is optional via correct_choi() method)
+    return choi
+
+def compute_choi_state(center, axes, R):
+    """Compute the Choi state from ellipsoid parameters with optional correction.
+    
+    For compatibility with any code still using the old interface.
+    Note: Use compute_choi_state_raw() for fast uncorrected computation matching Legacy.
+    
+    Args:
+        center: Center of the ellipsoid (Bloch vector)
+        axes: Semi-axes of the ellipsoid
+        R: Rotation matrix of the ellipsoid
+        
+    Returns:
+        Corrected Choi matrix
+    """
+    choi = compute_choi_state_raw(center, axes, R)
+    # Only correct if explicitly needed (optional post-processing)
     cc = CorrectChoi(choi)
     corrected, count = cc.choi_checker(repeat=100, tol=1e-4, print_reason=False)
-
     return corrected
 
 def compute_memory_robustness(choi):

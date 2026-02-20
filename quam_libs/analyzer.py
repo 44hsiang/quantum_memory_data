@@ -8,11 +8,11 @@ import numpy as np
 @dataclass
 class EllipsoidFitParameters:
     filter_method: str = "ransac"
-    ransac_threshold: float = 0.03
-    ransac_iterations: int = 1500
-    random_state: int | None = 42
+    ransac_threshold: float = 0.05
+    ransac_iterations: int = 1000
+    random_state: int | None = None
     correct_rotation_orientation: bool = False
-    find_best_order:bool = False
+    find_best_order: bool = False
 
 class QuantumMemoryAnalyze:
     
@@ -25,8 +25,12 @@ class QuantumMemoryAnalyze:
         self.corrected_dm, self.corrected_bloch = self.valid_data()
         self.ellipsoid_result = self.ellipsoid_fit_results()
         center, axes, R = self.ellipsoid_result['center'], self.ellipsoid_result['axes'], self.ellipsoid_result['rotation_matrix']
-        self.choi = self.choi_state(center, axes, R)
-        self.memory_robustness = self.memory_robustness(self.choi)
+        # Store parameters for lazy evaluation (matching Legacy behavior)
+        self._center = center
+        self._axes = axes
+        self._R = R
+        self._choi = None
+        self._memory_robustness = None
     def valid_data(self,method="manual"):
         """
         project measurement data to density matrix by using MLE,
@@ -82,10 +86,50 @@ class QuantumMemoryAnalyze:
         """   
         return self._build_ellipsoid_tool().plot(ax=ax, title=title)
 
-    # quantum channel analysis
+    # quantum channel analysis (lazy evaluation)
+    @property
+    def choi(self):
+        """Lazy-loaded Choi state (computed on first access, uncorrected like Legacy)."""
+        if self._choi is None:
+            # Import here to avoid circular imports at module level
+            from .quantum_channel_utils import compute_choi_state_raw
+            self._choi = compute_choi_state_raw(self._center, self._axes, self._R)
+        return self._choi
+    
+    @choi.setter
+    def choi(self, value):
+        """Allow setting choi state directly."""
+        self._choi = value
+    
+    @property
+    def memory_robustness(self):
+        """Lazy-loaded memory robustness (computed on first access)."""
+        if self._memory_robustness is None:
+            self._memory_robustness = compute_memory_robustness(self.choi)
+        return self._memory_robustness
+    
+    @memory_robustness.setter
+    def memory_robustness(self, value):
+        """Allow setting memory robustness directly."""
+        self._memory_robustness = value
+    
+    def correct_choi(self, repeat=100, tol=1e-4):
+        """Correct the Choi state using CorrectChoi (optional post-processing).
+        
+        Args:
+            repeat: Number of iterations for correction
+            tol: Tolerance for correction
+            
+        Returns:
+            Corrected choi matrix
+        """
+        cc = CorrectChoi(self.choi)
+        corrected_choi, count = cc.choi_checker(repeat=repeat, tol=tol)
+        return corrected_choi
+    
     @staticmethod
     def choi_state(center, axes, R):
-        """Compute the Choi state from ellipsoid parameters.
+        """Compute the Choi state from ellipsoid parameters (static method, uncorrected).
         
         Args:
             center: Center of the ellipsoid (Bloch vector)
@@ -93,14 +137,8 @@ class QuantumMemoryAnalyze:
             R: Rotation matrix of the ellipsoid
             
         Returns:
-            Corrected Choi matrix
+            Uncorrected Choi matrix (matching Legacy behavior)
         """
-        return compute_choi_state(center, axes, R)
-    
-    @staticmethod
-    def memory_robustness(choi):
-        """Return the entanglement robustness of `choi`.
-        Usage: `QuantumMemory.memory_robustness(choi)`.
-        """
-        return compute_memory_robustness(choi)
+        from .quantum_channel_utils import compute_choi_state_raw
+        return compute_choi_state_raw(center, axes, R)
 
