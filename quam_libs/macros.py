@@ -15,6 +15,27 @@ def generate_uniform_sphere_angles(n_points):
     phi_list = phi.tolist()
 
     return theta_list, phi_list
+# ellipsoid param conversion
+def ellipsoid_to_quadric(center, axes, R):
+
+    c = np.asarray(center, dtype=float).reshape(3)
+    a, b, c_len = np.asarray(axes, dtype=float).reshape(3)
+    R = np.asarray(R, dtype=float).reshape(3, 3)
+
+    Q_local = np.diag([1/a**2, 1/b**2, 1/c_len**2])
+    Q = R @ Q_local @ R.T           
+
+    linear = -2 * Q @ c              # (G, H, I)
+
+    J = float(c @ Q @ c - 1.0)
+
+    A, B, C = Q[0, 0], Q[1, 1], Q[2, 2]
+    D = Q[0, 1]+Q[1, 0]
+    E = Q[0, 2]+Q[2, 0]
+    F = Q[1, 2]+Q[2, 1]
+    G, H, I = linear
+
+    return np.array([A, B, C, D, E, F, G, H, I, J])
 
 
 # fitting tool
@@ -51,3 +72,4 @@ def dephasing_errorbar(T1, T2, sT1, sT2, rho=0.0, pure=False):
     var = (dT1*sT1)**2 + (dT2*sT2)**2 + 2.0*rho*(dT1*sT1)*(dT2*sT2)
     var = np.maximum(var, 0.0)
     return val, np.sqrt(var)
+

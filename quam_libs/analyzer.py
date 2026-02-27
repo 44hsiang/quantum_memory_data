@@ -102,28 +102,37 @@ class QuantumMemoryAnalyze:
         self._choi = value
     
     @property
-    def memory_robustness(self):
+    def memory_robustness_property(self):
         """Lazy-loaded memory robustness (computed on first access)."""
         if self._memory_robustness is None:
             self._memory_robustness = compute_memory_robustness(self.choi)
         return self._memory_robustness
     
-    @memory_robustness.setter
-    def memory_robustness(self, value):
-        """Allow setting memory robustness directly."""
-        self._memory_robustness = value
+    @staticmethod
+    def memory_robustness(choi):
+        """Compute memory robustness from a Choi state (static method).
+        
+        Args:
+            choi: Choi matrix
+            
+        Returns:
+            Memory robustness value
+        """
+        return compute_memory_robustness(choi)
     
-    def correct_choi(self, repeat=100, tol=1e-4):
+    @staticmethod
+    def correct_choi(choi, repeat=100, tol=1e-4):
         """Correct the Choi state using CorrectChoi (optional post-processing).
         
         Args:
+            choi: Choi matrix to correct
             repeat: Number of iterations for correction
             tol: Tolerance for correction
             
         Returns:
             Corrected choi matrix
         """
-        cc = CorrectChoi(self.choi)
+        cc = CorrectChoi(choi)
         corrected_choi, count = cc.choi_checker(repeat=repeat, tol=tol)
         return corrected_choi
     
