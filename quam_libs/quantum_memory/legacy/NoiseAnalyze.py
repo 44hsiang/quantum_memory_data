@@ -8,6 +8,8 @@ from quam_libs.quantum_memory.legacy.marcos import density_matrix_to_bloch_vecto
 from quam_libs.quantum_memory.legacy.EllipsoidTool import EllipsoidTool
 from quam_libs.quantum_memory.legacy.CorrectBloch import CorrectBlochSphere, CorrectChoi
 from quam_libs.quantum_memory.entanglement_robustness import entanglementRobustness
+from picos.expressions.algebra import partial_transpose
+
 #matplotlib.use('TkAgg')
 
 from dataclasses import dataclass
@@ -124,6 +126,8 @@ class QuantumMemory:
 
         choi = (choi + choi.conj().T) / 2
         choi /= np.trace(choi)
+
+        choi = partial_transpose(choi,0).np
         return choi
 
     @staticmethod

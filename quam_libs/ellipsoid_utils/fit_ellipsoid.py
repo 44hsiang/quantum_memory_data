@@ -101,8 +101,8 @@ def polyToParams3D(vec,printMe):
     print('\nAxes are\n',axes  ,'\n')
 
    inve=inv(ec) #inverse is actually the transpose here
-   #if np.linalg.det(inve)<0:
-   #     inve[0,:] *= -1 # flip the last column to make it a right handed system
+   if np.linalg.det(inve)<0:
+       inve[:,2] *= -1 # flip the last column to make it a right handed system
 
    return (center,axes,inve)
 

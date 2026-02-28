@@ -3,6 +3,7 @@
 import numpy as np
 from .QI_utils import CorrectChoi, entanglementRobustness
 from qutip import Qobj
+from picos.expressions.algebra import partial_transpose
 
 # simulation utility functions
 def error_gate(rho, readout_error):
@@ -67,6 +68,7 @@ def compute_choi_state_raw(center, axes, R):
     choi = (choi + choi.conj().T) / 2
     choi /= np.trace(choi)
 
+    choi = partial_transpose(choi, 0).np
     # Return uncorrected choi (correction is optional via correct_choi() method)
     return choi
 

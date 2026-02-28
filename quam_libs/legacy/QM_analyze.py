@@ -8,7 +8,7 @@ from scipy.spatial import ConvexHull, cKDTree
 from scipy.linalg import eigvalsh
 import cvxpy as cp
 from itertools import permutations
-from quam_libs.legacy.fit_ellipsoid import ls_ellipsoid, polyToParams3D
+from quam_libs.ellipsoid_utils.fit_ellipsoid import ls_ellipsoid, polyToParams3D
 
 ## Helper functions
 def MLE(original_P,confusion_matrix):
