@@ -8,6 +8,7 @@ dependencies = [
     "cvxpy>=1.7.5",
     "ipykernel>=7.2.0",
     "mosek>=11.1.5",
+    "netCDF4>=1.6.0",
     "pennylane>=0.44.0",
     "picos>=2.6.2",
     "qiskit-experiments>=0.13.0",
