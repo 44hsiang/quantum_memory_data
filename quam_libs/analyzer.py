@@ -121,19 +121,19 @@ class QuantumMemoryAnalyze:
         return compute_memory_robustness(choi)
     
     @staticmethod
-    def correct_choi(choi, repeat=100, tol=1e-4):
+    def correct_choi(choi, repeat=100, tol=1e-4,print_reason=False):
         """Correct the Choi state using CorrectChoi (optional post-processing).
         
         Args:
             choi: Choi matrix to correct
             repeat: Number of iterations for correction
             tol: Tolerance for correction
-            
+            print_reason: Whether to print the reason for correction
         Returns:
             Corrected choi matrix
         """
         cc = CorrectChoi(choi)
-        corrected_choi, count = cc.choi_checker(repeat=repeat, tol=tol)
+        corrected_choi, count = cc.choi_checker(repeat=repeat, tol=tol,print_reason=print_reason)
         return corrected_choi
     
     @staticmethod

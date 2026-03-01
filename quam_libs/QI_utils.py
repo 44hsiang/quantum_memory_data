@@ -2,6 +2,9 @@ from scipy.linalg import eigvalsh, svd
 import numpy as np
 import cvxpy as cp
 
+import warnings
+
+warnings.filterwarnings("ignore", category=FutureWarning, module="cvxpy.atoms.affine.reshape")
 
 identity = np.array([[1, 0], [0, 1]])
 sigma_x = np.array([[0, 1], [1, 0]])
@@ -234,14 +237,21 @@ class CorrectChoi:
         count = 0
         for i in range(repeat):
             count += 1
-            from pennylane.math import partial_trace
+            # from pennylane.math import partial_trace
+            # is_hermitian = np.allclose(choi, choi.conj().T, atol=tol)
+            # eigenvalues = eigvalsh(choi)
+            # is_psd = np.all(eigenvalues >= -tol)
+            # trace_is_one = abs(np.trace(choi) - 1) < tol
+            # pt = partial_trace(choi, indices=index)
+            # pt_trace_is_one = trace_norm(pt,0.5*np.eye(2)) < tol
+            from picos import partial_trace
             is_hermitian = np.allclose(choi, choi.conj().T, atol=tol)
             eigenvalues = eigvalsh(choi)
             is_psd = np.all(eigenvalues >= -tol)
             trace_is_one = abs(np.trace(choi) - 1) < tol
-            pt = partial_trace(choi, indices=index)
+            pt = partial_trace(choi, subsystems=index[0], dimensions=(2, 2))
+            # pt = partial_trace(choi, indices=index)
             pt_trace_is_one = trace_norm(pt,0.5*np.eye(2)) < tol
-            #pt_trace_is_one = trace_norm(pt,np.eye(2)) < tol
 
             if is_hermitian and is_psd and trace_is_one and pt_trace_is_one:
                 print(f"After {count} iterations, the Choi state is valid.")
