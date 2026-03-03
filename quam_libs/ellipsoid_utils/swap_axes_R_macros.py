@@ -46,7 +46,8 @@ def swap_axes_by_index(R,axes, idx1, idx2):
     # 2. Simply swap the axes label strings
     new_axes[idx1], new_axes[idx2] = new_axes[idx2], new_axes[idx1]
     
-    # 3. Simply swap the two rows of R matrix, which changes det(R)=-1 to det(R)=1
+    # 3. Simply swap the two rows of R matrix
     new_R[[idx1, idx2], :] = new_R[[idx2, idx1], :]
     
     return new_R, new_axes
+
