@@ -1,0 +1,27 @@
+{
+    "created_at": "2026-03-02T11:43:59+08:00",
+    "metadata": {
+        "description": null,
+        "run_start": "2026-03-02T11:43:59.158+08:00",
+        "run_end": "2026-03-02T11:43:59.219+08:00",
+        "name": "iSWAP_t2_full_data",
+        "data_path": "2026-03-02/#560_iSWAP_t2_full_data_114359"
+    },
+    "data": {
+        "parameters": {
+            "model": {},
+            "schema": {
+                "additionalProperties": false,
+                "properties": {},
+                "title": "NodeParameters",
+                "type": "object"
+            }
+        },
+        "outcomes": {},
+        "quam": "./quam_state"
+    },
+    "id": 560,
+    "parents": [
+        559
+    ]
+}
