@@ -51,3 +51,38 @@ def swap_axes_by_index(R,axes, idx1, idx2):
     
     return new_R, new_axes
 
+
+def sort_axes_ascending(R, axes):
+    """
+    Sort axes in ascending order (smallest to largest: x_min, y_mid, z_max).
+    Correspondingly reorder the columns of rotation matrix R (eigenvectors).
+    
+    The rotation matrix columns represent the eigenvectors of the ellipsoid,
+    so they must be reordered to match the axes ordering.
+    
+    Parameters:
+    -----------
+    R : np.ndarray
+        Rotation matrix (3x3), where each column is an eigenvector
+    axes : np.ndarray or list
+        Ellipsoid semi-axes lengths [a, b, c]
+        
+    Returns:
+    --------
+    R_sorted : np.ndarray
+        Rotation matrix with columns reordered according to ascending axes
+    axes_sorted : np.ndarray
+        Axes sorted in ascending order
+    """
+    # Get the indices that would sort axes in ascending order
+    sort_indices = np.argsort(axes)
+    
+    # Sort axes
+    axes_sorted = np.array(axes)[sort_indices]
+    
+    # Reorder columns of R according to the sorting indices
+    # Each column of R is an eigenvector corresponding to an axis
+    R_sorted = R[:, sort_indices].copy()
+    
+    return R_sorted, axes_sorted
+
