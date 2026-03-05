@@ -47,7 +47,7 @@ def swap_axes_by_index(R,axes, idx1, idx2):
     new_axes[idx1], new_axes[idx2] = new_axes[idx2], new_axes[idx1]
     
     # 3. Simply swap the two rows of R matrix
-    new_R[[idx1, idx2], :] = new_R[[idx2, idx1], :]
+    new_R[:,[idx1, idx2]] = new_R[:,[idx2, idx1]]
     
     return new_R, new_axes
 
@@ -83,6 +83,9 @@ def sort_axes_ascending(R, axes):
     # Reorder columns of R according to the sorting indices
     # Each column of R is an eigenvector corresponding to an axis
     R_sorted = R[:, sort_indices].copy()
-    
+    if np.linalg.det(R_sorted) < 0:
+        # If the determinant is negative, we have a left-handed system.
+        # We can fix this by flipping the sign of one column (e.g., the first column).
+        R_sorted[:, 2] *= -1
     return R_sorted, axes_sorted
 
