@@ -6,6 +6,7 @@ import numpy as np
 
 ND_TAG = "__ndarray_ref__"
 
+#TODO: save the ellipsoid_analyze object
 
 def _to_jsonable(obj: Any):
     # numpy scalar -> python scalar
@@ -16,7 +17,7 @@ def _to_jsonable(obj: Any):
 
 def split_ndarrays_to_npz_json(data: Any, npz_path: str, json_path: str):
     """
-    把 data 中所有 ndarray 抽出存成 npz，JSON 留 reference。
+    Extract all ndarrays from data into an npz file, keeping references in JSON.
     """
     arrays = {}
 
@@ -51,7 +52,7 @@ def split_ndarrays_to_npz_json(data: Any, npz_path: str, json_path: str):
 
 def load_from_npz_json(npz_path: str, json_path: str):
     """
-    由 npz + JSON manifest 還原原始結構（ndarray 會回來）。
+    Reconstruct the original structure from npz + JSON manifest (ndarrays restored).
     """
     manifest = json.loads(Path(json_path).read_text(encoding="utf-8"))
     npz = np.load(npz_path, allow_pickle=False)
@@ -69,7 +70,7 @@ def load_from_npz_json(npz_path: str, json_path: str):
 
 
 if __name__ == "__main__":
-    # 假設 Markovian_data 是你的原始 dict
+    # Assume Markovian_data is your original dict
     Markovian_data = {
         "a": np.arange(6).reshape(2, 3),
         "meta": {"name": "test"},
