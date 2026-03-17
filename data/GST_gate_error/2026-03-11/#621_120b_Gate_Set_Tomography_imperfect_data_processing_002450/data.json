@@ -1,0 +1,129 @@
+{
+    "ds": "./ds.h5",
+    "figs": {},
+    "results": {
+        "TP": {
+            "rho0": {
+                "fidelity": "./arrays.npz#results.TP.rho0.fidelity",
+                "density_mx": "./arrays.npz#results.TP.rho0.density_mx"
+            },
+            "meas_op": {
+                "0": {
+                    "fidelity": "./arrays.npz#results.TP.meas_op.0.fidelity",
+                    "povm": "./arrays.npz#results.TP.meas_op.0.povm"
+                },
+                "1": {
+                    "fidelity": "./arrays.npz#results.TP.meas_op.1.fidelity",
+                    "povm": "./arrays.npz#results.TP.meas_op.1.povm"
+                }
+            },
+            "gate_op": {
+                "I": {
+                    "fidelity": "./arrays.npz#results.TP.gate_op.I.fidelity",
+                    "robustness": "./arrays.npz#results.TP.gate_op.I.robustness",
+                    "choi": "./arrays.npz#results.TP.gate_op.I.choi"
+                },
+                "x90": {
+                    "fidelity": "./arrays.npz#results.TP.gate_op.x90.fidelity",
+                    "robustness": "./arrays.npz#results.TP.gate_op.x90.robustness",
+                    "choi": "./arrays.npz#results.TP.gate_op.x90.choi"
+                },
+                "y90": {
+                    "fidelity": "./arrays.npz#results.TP.gate_op.y90.fidelity",
+                    "robustness": "./arrays.npz#results.TP.gate_op.y90.robustness",
+                    "choi": "./arrays.npz#results.TP.gate_op.y90.choi"
+                }
+            }
+        },
+        "CPTP": {
+            "rho0": {
+                "fidelity": "./arrays.npz#results.CPTP.rho0.fidelity",
+                "density_mx": "./arrays.npz#results.CPTP.rho0.density_mx"
+            },
+            "meas_op": {
+                "0": {
+                    "fidelity": "./arrays.npz#results.CPTP.meas_op.0.fidelity",
+                    "povm": "./arrays.npz#results.CPTP.meas_op.0.povm"
+                },
+                "1": {
+                    "fidelity": "./arrays.npz#results.CPTP.meas_op.1.fidelity",
+                    "povm": "./arrays.npz#results.CPTP.meas_op.1.povm"
+                }
+            },
+            "gate_op": {
+                "I": {
+                    "fidelity": "./arrays.npz#results.CPTP.gate_op.I.fidelity",
+                    "robustness": "./arrays.npz#results.CPTP.gate_op.I.robustness",
+                    "choi": "./arrays.npz#results.CPTP.gate_op.I.choi"
+                },
+                "x90": {
+                    "fidelity": "./arrays.npz#results.CPTP.gate_op.x90.fidelity",
+                    "robustness": "./arrays.npz#results.CPTP.gate_op.x90.robustness",
+                    "choi": "./arrays.npz#results.CPTP.gate_op.x90.choi"
+                },
+                "y90": {
+                    "fidelity": "./arrays.npz#results.CPTP.gate_op.y90.fidelity",
+                    "robustness": "./arrays.npz#results.CPTP.gate_op.y90.robustness",
+                    "choi": "./arrays.npz#results.CPTP.gate_op.y90.choi"
+                }
+            }
+        },
+        "Ideal": {
+            "rho0": {
+                "fidelity": "./arrays.npz#results.Ideal.rho0.fidelity",
+                "density_mx": "./arrays.npz#results.Ideal.rho0.density_mx"
+            },
+            "meas_op": {
+                "0": {
+                    "fidelity": "./arrays.npz#results.Ideal.meas_op.0.fidelity",
+                    "povm": "./arrays.npz#results.Ideal.meas_op.0.povm"
+                },
+                "1": {
+                    "fidelity": "./arrays.npz#results.Ideal.meas_op.1.fidelity",
+                    "povm": "./arrays.npz#results.Ideal.meas_op.1.povm"
+                }
+            },
+            "gate_op": {
+                "I": {
+                    "fidelity": "./arrays.npz#results.Ideal.gate_op.I.fidelity",
+                    "robustness": "./arrays.npz#results.Ideal.gate_op.I.robustness",
+                    "choi": "./arrays.npz#results.Ideal.gate_op.I.choi"
+                },
+                "x90": {
+                    "fidelity": "./arrays.npz#results.Ideal.gate_op.x90.fidelity",
+                    "robustness": "./arrays.npz#results.Ideal.gate_op.x90.robustness",
+                    "choi": "./arrays.npz#results.Ideal.gate_op.x90.choi"
+                },
+                "y90": {
+                    "fidelity": "./arrays.npz#results.Ideal.gate_op.y90.fidelity",
+                    "robustness": "./arrays.npz#results.Ideal.gate_op.y90.robustness",
+                    "choi": "./arrays.npz#results.Ideal.gate_op.y90.choi"
+                }
+            }
+        }
+    },
+    "figure_prep": "./figure_prep.png",
+    "figure_meas_0": "./figure_meas_0.png",
+    "figure_meas_1": "./figure_meas_1.png",
+    "figure_gate_I": "./figure_gate_I.png",
+    "figure_gate_x90": "./figure_gate_x90.png",
+    "figure_gate_y90": "./figure_gate_y90.png",
+    "figure_gate_I_robust": "./figure_gate_I_robust.png",
+    "figure_gate_x90_robust": "./figure_gate_x90_robust.png",
+    "figure_gate_y90_robust": "./figure_gate_y90_robust.png",
+    "initial_parameters": {
+        "qubits": [
+            "q0"
+        ],
+        "alpha": 1.6,
+        "max_circuit_depth_in_power": 4,
+        "num_runs": 10000,
+        "reset_type_thermal_or_active": "active",
+        "flux_point_joint_or_independent": "joint",
+        "simulate": false,
+        "simulation_duration_ns": 5000,
+        "timeout": 100,
+        "load_data_id": null,
+        "multiplexed": false
+    }
+}
