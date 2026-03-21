@@ -1,0 +1,26 @@
+{
+    "created_at": "2026-03-21T12:15:33+08:00",
+    "metadata": {
+        "description": null,
+        "run_start": "2026-03-21T12:15:28.037+08:00",
+        "run_end": "2026-03-21T12:15:33.098+08:00",
+        "name": "ellipsoid_data",
+        "data_path": "2026-03-21/#947_ellipsoid_data_121533"
+    },
+    "data": {
+        "parameters": {
+            "model": {},
+            "schema": {
+                "additionalProperties": false,
+                "properties": {},
+                "title": "NodeParameters",
+                "type": "object"
+            }
+        },
+        "outcomes": {}
+    },
+    "id": 947,
+    "parents": [
+        946
+    ]
+}
