@@ -1,0 +1,26 @@
+{
+    "created_at": "2026-03-22T00:21:34+08:00",
+    "metadata": {
+        "description": null,
+        "run_start": "2026-03-22T00:21:34.933+08:00",
+        "run_end": "2026-03-22T00:21:34.944+08:00",
+        "name": "ellipsoid_analyze_again",
+        "data_path": "2026-03-22/#948_ellipsoid_analyze_again_002134"
+    },
+    "data": {
+        "parameters": {
+            "model": {},
+            "schema": {
+                "additionalProperties": false,
+                "properties": {},
+                "title": "NodeParameters",
+                "type": "object"
+            }
+        },
+        "outcomes": {}
+    },
+    "id": 948,
+    "parents": [
+        947
+    ]
+}
