@@ -60,7 +60,7 @@ def T1_extraction(ds):
 # math functions for depahsing simulation
 def non_Gaussian_noise(delta, a= -47701117184.95155 , x0=0.029, c=4507310.510302373+4.56e9, N=10000):
     x = np.random.uniform(x0 - delta, x0 + delta, N)
-    return a * (x - x0)**2 + c
+    return a * (x - x0)**2 +c
 
 def dephasing_errorbar(T1, T2, sT1, sT2, rho=0.0, pure=False):
     T1, T2  = np.asarray(T1, float), np.asarray(T2, float)
@@ -73,3 +73,8 @@ def dephasing_errorbar(T1, T2, sT1, sT2, rho=0.0, pure=False):
     var = np.maximum(var, 0.0)
     return val, np.sqrt(var)
 
+
+if __name__ == "__main__":
+    detuning =non_Gaussian_noise(0.002)-non_Gaussian_noise(0)
+    print(max(detuning), min(detuning), np.mean(detuning), np.std(detuning))
+    print(detuning)
