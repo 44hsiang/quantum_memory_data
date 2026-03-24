@@ -348,15 +348,16 @@ def find_best_fit(center,axes,R,param):
     perm_diff_dict = {}
     for perm in np.array(perms):
         original_param = param/np.abs(param[-1])
-        fitted_param = ellipsoid_to_quadric(center, axes[perm], R[perm,:])
+        fitted_param = ellipsoid_to_quadric(center, axes[perm], R[:,perm])
         difference = np.abs(original_param - fitted_param)
         perm_diff_dict[tuple(perm)] = difference[0:6].sum()
     min_perm = list(min(perm_diff_dict, key=perm_diff_dict.get))
-    R = R[min_perm,:]
+    R = R[:,min_perm]
     axes = axes[min_perm]
-    if np.linalg.det(R) > 0:
-        R[0,:]*=-1 
+    if np.linalg.det(R) < 0:
+        R[:,0]*=-1 
     return axes,R
+
 
 # Quantum Process Tomography
 

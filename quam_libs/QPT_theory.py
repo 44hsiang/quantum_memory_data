@@ -54,10 +54,22 @@ def make_noisy_measurements(q: float) -> List[np.ndarray]:
     I2 = np.eye(2, dtype=complex)
     noisy_meas = []
 
-    for E in IDEAL_MEAS:
-        E_noisy = q * E + (1 - q) * I2 / 2
-        noisy_meas.append(E_noisy)
+    rho_x = np.array([[0, 1],
+                   [1, 0]], dtype=complex)
 
+    rho_y = np.array([[0, -1j],
+                   [1j, 0]], dtype=complex)
+    
+    rho_z = np.array([[1, 0],
+                   [0, -1]], dtype=complex)
+
+    for E in IDEAL_MEAS:
+        #E_noisy = (1-q) * E + q * I2 / 2
+        # noisy_meas.append(E_noisy)
+        E_noisy = q/4* (rho_x @ E @ rho_x + rho_y.conj().T @ E @ rho_y +rho_z @ E @ rho_z) \
+          + (1-3*q/4)* E 
+        noisy_meas.append(E_noisy)
+             
     return noisy_meas
 
 

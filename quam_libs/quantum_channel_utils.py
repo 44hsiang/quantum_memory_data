@@ -24,8 +24,8 @@ def error_gate(rho, readout_error):
     rho_z = np.array([[1, 0],
                    [0, -1]], dtype=complex)
 
-    err = (gamma / 3) * (rho_x @ rho_mat @ rho_x + rho_y @ rho_mat @ rho_y +rho_z @ rho_mat @ rho_z ) \
-          + (1 - gamma) * rho_mat      
+    err = gamma/4* (rho_x @ rho_mat @ rho_x + rho_y @ rho_mat @ rho_y.conj().T +rho_z @ rho_mat @ rho_z) \
+          + (1-3*gamma/4)* rho_mat      
 
     return err
 

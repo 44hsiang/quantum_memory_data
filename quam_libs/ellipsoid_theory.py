@@ -48,19 +48,19 @@ def _simulate_single_dataset(
     data_angle = np.column_stack([theta_range, phi_range])
 
     # Match notebook behavior: sample non-Gaussian detuning once and accumulate.
-    detuning = non_Gaussian_noise(flux_noise, N=n_points) - non_Gaussian_noise(0, N=n_points)
-
+    # detuning = non_Gaussian_noise(flux_noise, N=n_points) - non_Gaussian_noise(0, N=n_points)
+    detuning = 0 
     bloch_vectors = []
     detuning_sum = 0.0
     for i in range(n_points):
-        detuning_sum += detuning[i]
+        # detuning_sum += detuning[i]
         br_state = BR_density_matrix(
             theta_range[i],
             phi_range[i],
             t1,
             t2,
             t_delay,
-            detuning=detuning_sum,
+            detuning=detuning,
         )
         error_br_state = error_gate(br_state, error)
         bloch_vectors.append(density_matrix_to_bloch_vector(error_br_state))
