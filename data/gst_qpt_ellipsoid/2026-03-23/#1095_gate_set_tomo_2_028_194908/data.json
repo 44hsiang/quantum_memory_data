@@ -1,0 +1,124 @@
+{
+    "ds": "./ds.h5",
+    "figs": {},
+    "results": {
+        "q0": {
+            "gst_results": {
+                "TP": {
+                    "rho0": {
+                        "density_mx": "./arrays.npz#results.q0.gst_results.TP.rho0.density_mx",
+                        "fidelity": 0.8247847003626002
+                    },
+                    "meas_op": {
+                        "0": {
+                            "povm": "./arrays.npz#results.q0.gst_results.TP.meas_op.0.povm",
+                            "fidelity": 0.8714536671015014
+                        },
+                        "1": {
+                            "povm": "./arrays.npz#results.q0.gst_results.TP.meas_op.1.povm",
+                            "fidelity": 0.9954025627656049
+                        }
+                    },
+                    "gate_op": {
+                        "I": {
+                            "choi": "./arrays.npz#results.q0.gst_results.TP.gate_op.I.choi",
+                            "fidelity": 0.9721276399530625,
+                            "robustness": 0.9447498492442465
+                        },
+                        "x90": {
+                            "choi": "./arrays.npz#results.q0.gst_results.TP.gate_op.x90.choi",
+                            "fidelity": 0.9385551637428207,
+                            "robustness": 0.9740021846906257
+                        },
+                        "y90": {
+                            "choi": "./arrays.npz#results.q0.gst_results.TP.gate_op.y90.choi",
+                            "fidelity": 0.9512950230228976,
+                            "robustness": 1.0086431040106136
+                        }
+                    }
+                },
+                "CPTP": {
+                    "rho0": {
+                        "density_mx": "./arrays.npz#results.q0.gst_results.CPTP.rho0.density_mx",
+                        "fidelity": 0.8283033672334792
+                    },
+                    "meas_op": {
+                        "0": {
+                            "povm": "./arrays.npz#results.q0.gst_results.CPTP.meas_op.0.povm",
+                            "fidelity": 0.8778590927965083
+                        },
+                        "1": {
+                            "povm": "./arrays.npz#results.q0.gst_results.CPTP.meas_op.1.povm",
+                            "fidelity": 0.9912315493859117
+                        }
+                    },
+                    "gate_op": {
+                        "I": {
+                            "choi": "./arrays.npz#results.q0.gst_results.CPTP.gate_op.I.choi",
+                            "fidelity": 0.9705586312410123,
+                            "robustness": 0.9416054315939757
+                        },
+                        "x90": {
+                            "choi": "./arrays.npz#results.q0.gst_results.CPTP.gate_op.x90.choi",
+                            "fidelity": 0.9357745532249713,
+                            "robustness": 0.9677910943943617
+                        },
+                        "y90": {
+                            "choi": "./arrays.npz#results.q0.gst_results.CPTP.gate_op.y90.choi",
+                            "fidelity": 0.9475751510343469,
+                            "robustness": 0.9999999588100561
+                        }
+                    }
+                },
+                "Ideal": {
+                    "rho0": {
+                        "density_mx": "./arrays.npz#results.q0.gst_results.Ideal.rho0.density_mx",
+                        "fidelity": 0.9999999999999999
+                    },
+                    "meas_op": {
+                        "0": {
+                            "povm": "./arrays.npz#results.q0.gst_results.Ideal.meas_op.0.povm",
+                            "fidelity": 0.9999999999999999
+                        },
+                        "1": {
+                            "povm": "./arrays.npz#results.q0.gst_results.Ideal.meas_op.1.povm",
+                            "fidelity": 1.0000000000000002
+                        }
+                    },
+                    "gate_op": {
+                        "I": {
+                            "choi": "./arrays.npz#results.q0.gst_results.Ideal.gate_op.I.choi",
+                            "fidelity": 1.0,
+                            "robustness": 0.9999999999999982
+                        },
+                        "x90": {
+                            "choi": "./arrays.npz#results.q0.gst_results.Ideal.gate_op.x90.choi",
+                            "fidelity": 0.9999999999999996,
+                            "robustness": 0.9999999960997898
+                        },
+                        "y90": {
+                            "choi": "./arrays.npz#results.q0.gst_results.Ideal.gate_op.y90.choi",
+                            "fidelity": 0.9999999999999997,
+                            "robustness": 0.9999999960997896
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "initial_parameters": {
+        "qubits": [
+            "q0"
+        ],
+        "alpha": 1.28,
+        "max_circuit_depth_in_power": 2,
+        "num_runs": 10000,
+        "reset_type_thermal_or_active": "active",
+        "flux_point_joint_or_independent": "joint",
+        "simulate": false,
+        "simulation_duration_ns": 5000,
+        "timeout": 100,
+        "load_data_id": null,
+        "multiplexed": false
+    }
+}

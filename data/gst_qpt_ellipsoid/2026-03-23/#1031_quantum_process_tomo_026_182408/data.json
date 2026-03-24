@@ -1,0 +1,135 @@
+{
+    "ds": "./ds.h5",
+    "figs": {},
+    "results": {
+        "q0": {
+            "0": {
+                "raw": {
+                    "Bloch vector": [
+                        -0.0526,
+                        -0.0696,
+                        0.605
+                    ],
+                    "density matrix": "./arrays.npz#results.q0.0.raw.density matrix",
+                    "fidelity": 0.8025,
+                    "trace_distance": 0.20225968456417606
+                },
+                "mitigated": {
+                    "Bloch vector": "./arrays.npz#results.q0.0.mitigated.Bloch vector",
+                    "density matrix": "./arrays.npz#results.q0.0.mitigated.density matrix",
+                    "fidelity": 0.9996768160845375,
+                    "trace_distance": 0.017977316692502077
+                }
+            },
+            "1": {
+                "raw": {
+                    "Bloch vector": [
+                        0.4502,
+                        0.0038,
+                        -0.4844
+                    ],
+                    "density matrix": "./arrays.npz#results.q0.1.raw.density matrix",
+                    "fidelity": 0.7422,
+                    "trace_distance": 0.34224911979433925
+                },
+                "mitigated": {
+                    "Bloch vector": "./arrays.npz#results.q0.1.mitigated.Bloch vector",
+                    "density matrix": "./arrays.npz#results.q0.1.mitigated.density matrix",
+                    "fidelity": 0.8049152832386586,
+                    "trace_distance": 0.4416839557436306
+                }
+            },
+            "+": {
+                "raw": {
+                    "Bloch vector": [
+                        0.515,
+                        0.036,
+                        -0.2886
+                    ],
+                    "density matrix": "./arrays.npz#results.q0.+.raw.density matrix",
+                    "fidelity": 0.7575,
+                    "trace_distance": 0.28275915546627306
+                },
+                "mitigated": {
+                    "Bloch vector": "./arrays.npz#results.q0.+.mitigated.Bloch vector",
+                    "density matrix": "./arrays.npz#results.q0.+.mitigated.density matrix",
+                    "fidelity": 0.9554797094305523,
+                    "trace_distance": 0.190802858539643
+                }
+            },
+            "i+": {
+                "raw": {
+                    "Bloch vector": [
+                        -0.1024,
+                        0.5214,
+                        -0.2996
+                    ],
+                    "density matrix": "./arrays.npz#results.q0.i+.raw.density matrix",
+                    "fidelity": 0.7606999999999999,
+                    "trace_distance": 0.2869250250500991
+                },
+                "mitigated": {
+                    "Bloch vector": "./arrays.npz#results.q0.i+.mitigated.Bloch vector",
+                    "density matrix": "./arrays.npz#results.q0.i+.mitigated.density matrix",
+                    "fidelity": 0.9604063061838726,
+                    "trace_distance": 0.1786404739507107
+                }
+            },
+            "quantum information": {
+                "raw": {
+                    "ptm": "./arrays.npz#results.q0.quantum information.raw.ptm",
+                    "superoperator": "./arrays.npz#results.q0.quantum information.raw.superoperator",
+                    "choi": "./arrays.npz#results.q0.quantum information.raw.choi",
+                    "negativity": 0.2988330059734917,
+                    "Quantum Memory Robustness": 0.28866050116851705,
+                    "fidelity": 0.8217731783794611
+                },
+                "mitigated": {
+                    "ptm": "./arrays.npz#results.q0.quantum information.mitigated.ptm",
+                    "superoperator": "./arrays.npz#results.q0.quantum information.mitigated.superoperator",
+                    "choi": "./arrays.npz#results.q0.quantum information.mitigated.choi",
+                    "negativity": 0.7286084685654648,
+                    "Quantum Memory Robustness": 0.70127164204232,
+                    "fidelity": 0.8148453541851519
+                }
+            }
+        }
+    },
+    "figs_q0_0": "./figs_q0_0.png",
+    "figs_q0_1": "./figs_q0_1.png",
+    "figs_q0_+": "./figs_q0_+.png",
+    "figs_q0_i+": "./figs_q0_i+.png",
+    "initial_parameters": {
+        "qubits": [
+            "q0"
+        ],
+        "num_runs": 10000,
+        "reset_type_thermal_or_active": "active",
+        "flux_point_joint_or_independent": "joint",
+        "simulate": false,
+        "simulation_duration_ns": 2500,
+        "timeout": 100,
+        "load_data_id": null,
+        "multiplexed": false,
+        "desired_state": [
+            [
+                0.0,
+                0.0
+            ],
+            [
+                3.141592653589793,
+                0.0
+            ],
+            [
+                1.5707963267948966,
+                0.0
+            ],
+            [
+                1.5707963267948966,
+                1.5707963267948966
+            ]
+        ],
+        "operation_name": "id",
+        "alpha": 1.26
+    }
+}

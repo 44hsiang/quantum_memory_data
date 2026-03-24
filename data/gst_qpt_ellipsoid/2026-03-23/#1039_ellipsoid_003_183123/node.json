@@ -1,0 +1,132 @@
+{
+    "created_at": "2026-03-23T18:31:23+08:00",
+    "metadata": {
+        "description": null,
+        "run_start": "2026-03-23T18:29:41.533+08:00",
+        "run_end": "2026-03-23T18:31:23.533+08:00",
+        "name": "ellipsoid_003",
+        "data_path": "2026-03-23/#1039_ellipsoid_003_183123"
+    },
+    "data": {
+        "parameters": {
+            "model": {
+                "qubits": [
+                    "q0"
+                ],
+                "num_runs": 10000,
+                "reset_type_thermal_or_active": "active",
+                "flux_point_joint_or_independent": "joint",
+                "simulate": false,
+                "simulation_duration_ns": 10000,
+                "timeout": 100,
+                "load_data_id": null,
+                "multiplexed": false,
+                "number_of_points": 200,
+                "repeats": 1,
+                "alpha": 1.03
+            },
+            "schema": {
+                "additionalProperties": false,
+                "properties": {
+                    "qubits": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": [
+                            "q0"
+                        ],
+                        "title": "Qubits"
+                    },
+                    "num_runs": {
+                        "default": 10000,
+                        "title": "Num Runs",
+                        "type": "integer"
+                    },
+                    "reset_type_thermal_or_active": {
+                        "default": "active",
+                        "enum": [
+                            "thermal",
+                            "active"
+                        ],
+                        "title": "Reset Type Thermal Or Active",
+                        "type": "string"
+                    },
+                    "flux_point_joint_or_independent": {
+                        "default": "joint",
+                        "enum": [
+                            "joint",
+                            "independent"
+                        ],
+                        "title": "Flux Point Joint Or Independent",
+                        "type": "string"
+                    },
+                    "simulate": {
+                        "default": false,
+                        "title": "Simulate",
+                        "type": "boolean"
+                    },
+                    "simulation_duration_ns": {
+                        "default": 10000,
+                        "title": "Simulation Duration Ns",
+                        "type": "integer"
+                    },
+                    "timeout": {
+                        "default": 100,
+                        "title": "Timeout",
+                        "type": "integer"
+                    },
+                    "load_data_id": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "default": null,
+                        "title": "Load Data Id"
+                    },
+                    "multiplexed": {
+                        "default": false,
+                        "title": "Multiplexed",
+                        "type": "boolean"
+                    },
+                    "number_of_points": {
+                        "default": 200,
+                        "title": "Number Of Points",
+                        "type": "integer"
+                    },
+                    "repeats": {
+                        "default": 1,
+                        "title": "Repeats",
+                        "type": "integer"
+                    },
+                    "alpha": {
+                        "default": 1,
+                        "title": "Alpha",
+                        "type": "number"
+                    }
+                },
+                "title": "Parameters",
+                "type": "object"
+            }
+        },
+        "outcomes": {
+            "q0": "successful"
+        },
+        "quam": "./quam_state"
+    },
+    "id": 1039,
+    "parents": [
+        1038
+    ]
+}
