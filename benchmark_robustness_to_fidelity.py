@@ -11,18 +11,14 @@ import glob
 import os
 
 # %% Load data
-id_qpt, id_gst, id_ell = 1129, 1131, 1132
+# id_qpt, id_gst, id_ell = 1172, 1131, 1132
+id_qpt, id_gst, id_ell = 1218, 1131, 1132
 gst_depth = 8
 from pathlib import Path
 data_path = Path("data/gst_qpt_ellipsoid").resolve()
 node = QualibrationNode('robustness_to_fidelity')
 
-'''
-from quam_libs.QPT_theory import compute_qpt_theory
 
-alphas = np.array([round(0.01 * i, 2) for i in range(31)]) 
-qpt_choi_matrices_list, qpt_theory_fidelities_list = compute_qpt_theory(alphas, q_meas=0.995,verbose=True)
-'''
 da_gst = node.load_from_id(id_gst, base_path=data_path).results['ds'].sel(depth=gst_depth).sel(model_type='CPTP').robustness
 da_qpt = node.load_from_id(id_qpt, base_path=data_path).results['ds'].sel(model_type='mitigated').robustness
 da_ell = node.load_from_id(id_ell, base_path=data_path).results['ds'].robustness
@@ -59,9 +55,7 @@ combined = xr.concat(
 
 # %% Plot
 fig, ax = plt.subplots(figsize=(8, 6))
-'''
-ax.plot(alphas+1, qpt_theory_fidelities_list, linestyle='-', color='r', label='Theory')
-'''
+
 combined.plot.line(
     x='fidelity',
     hue='method',
@@ -76,4 +70,20 @@ ax.grid(True, linestyle='--', alpha=0.6)
 plt.tight_layout()
 plt.show()
 
+# %%
+from quam_libs.QPT_theory import compute_qpt_theory
+
+alphas = np.array([round(0.01 * i, 2) for i in range(31)]) 
+qpt_choi_matrices_list, qpt_theory_fidelities_list = compute_qpt_theory(alphas, q_meas=0.995,verbose=True)
+
+# %%
+fig, ax = plt.subplots(figsize=(8, 6))
+ax.plot(alphas + 1, qpt_theory_fidelities_list, linestyle='-', color='r', label='Theory')
+da_fid.plot.line(
+    x='alpha',
+    marker='o',
+    linewidth=1.5
+)
+
+plt.show()
 # %%
