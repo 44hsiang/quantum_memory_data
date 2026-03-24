@@ -55,7 +55,7 @@ combined = xr.concat(
     [da_gst_clean, da_qpt_clean, da_ell_clean], 
     # 強制使用 object 類型，不要讓 pandas 使用新的 StringDtype
     dim=pd.Index(['gst', 'qpt', 'ell'], name='method', dtype=object)
-)
+).sortby("fidelity")
 
 # %% Plot
 fig, ax = plt.subplots(figsize=(8, 6))
