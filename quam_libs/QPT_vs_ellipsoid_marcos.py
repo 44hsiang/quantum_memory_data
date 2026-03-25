@@ -4,8 +4,13 @@ from quam_libs.quantum_memory.legacy.NoiseAnalyze import *
 from quam_libs.QI_function import *
 import itertools
 
+import pygsti
+from picos import Problem
 
+from picos.expressions.variables import HermitianVariable
+from picos.expressions.algebra import trace, partial_transpose
 
+# %%
 
 def xyz_data_to_gate_fidelity(
     ds, 
@@ -588,3 +593,164 @@ def ellipsoid_to_quadric(center, axes, R):
 
     return np.array([A, B, C, D, E, F, G, H, I, J])
 
+# %% GST
+def gst_compute_robustness(
+    ds, 
+    exp_design,
+    operation_name='id',
+    verbose=False
+
+):
+    def transform_dataset_to_gst(ds):
+        gst_ds = pygsti.data.DataSet(outcome_labels=['0', '1'])
+        for i, crc in enumerate(exp_design.all_circuits_needing_data):
+            gst_ds.add_count_dict(crc, {
+                '0': ds.count0.values[0, i], 
+                '1': ds.count1.values[0, i]
+            })
+        return gst_ds
+        
+    def entanglementRobustness(state, solver='mosek', **extra_options) :
+        if isinstance(state, Qobj):
+            state = (state).full()
+        SP = Problem()
+        # add variable
+        gamma = HermitianVariable("gamma", (4, 4))
+        rho = HermitianVariable("rho", (4, 4))
+        # add constraints
+        SP.add_constraint(
+            (state + gamma) - rho == 0
+        )
+        SP.add_constraint(
+            partial_transpose(rho, 0) >> 0
+        )
+        SP.add_constraint(
+            gamma >> 0
+        )
+        SP.add_constraint(
+            trace(rho) - 1 >> 0
+        )
+        # find the solution
+        SP.set_objective(
+            'min',
+            trace(rho) - 1
+        )
+        # solve the problem
+        SP.solve(solver=solver, **extra_options)
+        # return results
+        return max(SP.value, 0)
+
+    # GST analysis using pyGSTi
+    gst_ds = transform_dataset_to_gst(ds)
+    gst_data = pygsti.protocols.ProtocolData(exp_design, gst_ds)
+    gst_protocol = pygsti.protocols.StandardGST()
+    gst_results = gst_protocol.run(gst_data)
+
+    est_model = gst_results.estimates['CPTPLND'].models['stdgaugeopt']
+    native_gate_keys = [(), ('Gxpi2', 0), ('Gypi2', 0)]
+    matrix_ptm = est_model.operations[native_gate_keys[0]].to_dense()
+    choi = pygsti.tools.jamiolkowski.jamiolkowski_iso(
+        matrix_ptm, op_mx_basis='pp', choi_mx_basis='std'
+    )
+
+    return entanglementRobustness(choi)
+
+import numpy as np
+import pygsti
+from picos import Problem
+from picos.expressions.variables import HermitianVariable
+from picos.expressions.algebra import trace, partial_transpose
+
+def run_gst_monte_carlo(ds, exp_design, n_shots=1000, num_resamples=100, verbose=True):
+    """
+    執行 Monte Carlo 抽樣以估計 GST Robustness 的統計誤差
+    
+    Args:
+        ds: 原始 xarray Dataset (包含平均後的 state 0/1 比例)
+        exp_design: pyGSTi 的實驗設計物件
+        n_shots: 原始實驗的平均次數 (例如 10,000)
+        num_resamples: Monte Carlo 抽樣次數 (建議 30-100 次以平衡速度與精度)
+    """   
+    def entanglementRobustness(state, solver='mosek', **extra_options) :
+        if isinstance(state, Qobj):
+            state = (state).full()
+        SP = Problem()
+        # add variable
+        gamma = HermitianVariable("gamma", (4, 4))
+        rho = HermitianVariable("rho", (4, 4))
+        # add constraints
+        SP.add_constraint(
+            (state + gamma) - rho == 0
+        )
+        SP.add_constraint(
+            partial_transpose(rho, 0) >> 0
+        )
+        SP.add_constraint(
+            gamma >> 0
+        )
+        SP.add_constraint(
+            trace(rho) - 1 >> 0
+        )
+        # find the solution
+        SP.set_objective(
+            'min',
+            trace(rho) - 1
+        )
+        # solve the problem
+        SP.solve(solver=solver, **extra_options)
+        # return results
+        return max(SP.value, 0)
+
+    mc_robustness_results = []
+    
+    print(f"Starting Monte Carlo analysis with {num_resamples} resamples...")
+
+    for i in range(num_resamples):
+        # --- Step A: 參數化抽樣 (還原統計漲落) ---
+        # 假設 ds.state 存的是機率 P1 (1 的比例)
+        p1_avg = ds.count1.values / 2000 # 取得所有序列的 P1 陣列
+        
+        # 根據二項式分佈產生模擬的成功次數 (Counts)，再轉回機率
+        simulated_counts1 = np.random.binomial(n_shots, p1_avg)
+        simulated_p1 = simulated_counts1 / n_shots
+        simulated_p0 = 1 - simulated_p1
+
+        # --- Step B: 建立虛擬 GST DataSet ---
+        tmp_gst_ds = pygsti.data.DataSet(outcome_labels=['0', '1'])
+        for j, crc in enumerate(exp_design.all_circuits_needing_data):
+            # 注意：這裡傳入的是模擬出的 Count 數
+            tmp_gst_ds.add_count_dict(crc, {
+                '0': n_shots - simulated_counts1[j], 
+                '1': simulated_counts1[j]
+            })
+
+        # --- Step C: 執行 CPTP GST 擬合 ---
+        data = pygsti.protocols.ProtocolData(exp_design, tmp_gst_ds)
+        results = pygsti.protocols.StandardGST(
+            optimizer={
+                'maxiter': 500,  # 從 100 提高到 500
+                'tol': 1e-6      # 設定收斂精度
+            }
+        ).run(data)
+        
+        # 提取 CPTP 模型
+        model = results.estimates['CPTPLND'].models['stdgaugeopt']
+        
+        # --- Step D: 計算 Robustness ---
+        # 映射 Gate Label (以 x90 為例)
+        gate_label = (())   # identity
+        ptm = model.operations[gate_label].to_dense()
+        choi = pygsti.tools.jamiolkowski.jamiolkowski_iso(ptm, 'pp', 'std')
+        
+        # 呼叫你定義的 picos 函數 (需確保在作用域內)
+        rob_val = entanglementRobustness(choi)
+        mc_robustness_results.append(rob_val)
+        
+        if verbose and (i+1) % 10 == 0:
+            print(f"Iteration {i+1}/{num_resamples} completed.")
+
+    # --- Step E: 統計分析 ---
+    mean_rob = np.mean(mc_robustness_results)
+    std_rob = np.std(mc_robustness_results)
+    
+    return mean_rob, std_rob, mc_robustness_results, simulated_counts1
