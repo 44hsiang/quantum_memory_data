@@ -730,7 +730,8 @@ def run_gst_monte_carlo(ds, exp_design, n_shots=1000, num_resamples=100, verbose
             optimizer={
                 'maxiter': 500,  # 從 100 提高到 500
                 'tol': 1e-6      # 設定收斂精度
-            }
+            },
+            verbosity=0
         ).run(data)
         
         # 提取 CPTP 模型
@@ -747,7 +748,7 @@ def run_gst_monte_carlo(ds, exp_design, n_shots=1000, num_resamples=100, verbose
         mc_robustness_results.append(rob_val)
         
         if verbose and (i+1) % 10 == 0:
-            print(f"Iteration {i+1}/{num_resamples} completed.")
+            print(f"    Iteration {i+1}/{num_resamples} completed.")
 
     # --- Step E: 統計分析 ---
     mean_rob = np.mean(mc_robustness_results)
