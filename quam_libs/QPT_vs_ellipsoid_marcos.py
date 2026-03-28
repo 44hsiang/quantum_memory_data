@@ -373,16 +373,24 @@ def compute_robustness(ds, confusion_matrix, apply_mitigation=False, verbose=Fal
     #corrected_bloch = noise_analyzer.corrected_bloch
     
     center, axes, R, volume, param = noise_analyzer.ellipsoid_fit()
-    # ellipsoid_dict = get_equivalent_ellipsoid_rotations(R, axes, center)
+    ellipsoid_dict = get_equivalent_ellipsoid_rotations(R, axes, center)
     
     # qmr = 0
     axes, R = find_best_fit(center, axes, R, param)
 
     robustness=0
-    sign = [(1,1,1),(1,-1,-1),(-1,1,-1),(-1,-1,1)]
-    for j in range(len(sign)):
-        R_test = R * np.array(sign[j])
-        qmr_value = qm_value(axes, center, R_test)
+    # sign = [(1,1,1),(1,-1,-1),(-1,1,-1),(-1,-1,1)]
+    # for j in range(len(sign)):
+    #     R_test = R * np.array(sign[j])
+    #     qmr_value = qm_value(axes, center, R_test)
+    #     if qmr_value > robustness:
+    #         R_max = R_test.copy()
+    #         robustness = qmr_value
+    for j in range(len(ellipsoid_dict)):
+        R_test = ellipsoid_dict[j]['rotation_matrix']
+        axes_test = ellipsoid_dict[j]['axes_lengths']
+        center_test = ellipsoid_dict[j]['center']
+        qmr_value = qm_value(axes_test, center_test, R_test)
         if qmr_value > robustness:
             R_max = R_test.copy()
             robustness = qmr_value
