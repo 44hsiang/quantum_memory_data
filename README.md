@@ -1,6 +1,6 @@
 # quantum_memory_data
 
-Data availability repository for the publication in PRX Quantum. This project contains experimental data, analysis code, and generated figures for quantum memory research including Markovian dynamics, non-Markovian dynamics, and iSWAP gate characterization.
+Data availability repository for the publication in PRX Quantum. This project contains experimental data, analysis code, and automated figure generation.
 
 ## Project Structure
 
@@ -13,17 +13,52 @@ The central repository for all raw experimental datasets. Organized by experimen
 - **`iSWAP_t1t2/`** - T1 and T2 characterization data for iSWAP gate performance
 - **`QPT_gate_error_vs_fidelity/`** - Quantum process tomography data correlating gate error and fidelity metrics
 - **`QPT_vs_ellipsoid/`** - Quantum state/channel characterization using ellipsoid reconstruction methods
+- **`gst_qpt_ellipsoid/`** - GST, QPT, and ellipsoid characterization data
+- **`GST_gate_error/`** - Gate set tomography error analysis
 
 Each subdirectory contains timestamped folders with raw experimental measurements and intermediate analysis results.
+
+### 🔬 `data_processing/` - Data Analysis Notebooks
+Jupyter notebooks containing step-by-step data processing and analysis workflows:
+
+- **`Markovian_data.ipynb`** - Analysis of Markovian quantum memory dynamics
+- **`non_Markovian150ns_data.ipynb`** - Non-Markovian analysis with 150ns time resolution
+- **`Raw_nonMarkovian_Markobian_data.ipynb`** - Comparative analysis of raw Markovian and non-Markovian data
+- **`QPT_gate_error_vs_fidelity.ipynb`** - Quantum process tomography and gate fidelity correlation analysis
+- **`resample_ellipsoid_QPT.ipynb`** - Ellipsoid resampling and QPT analysis
+
+Each notebook documents the experimental data processing, visualization, and interpretation steps with detailed comments.
+
+### 📈 `paper_figure/` - Publication Figures
+Contains all figures generated for publication (PDF format):
+
+- **`Fig2.pdf`** - Ellipsoid and QPT characterization for GST data
+- **`Fig3.pdf`** - Non-Markovian dynamics and robustness analysis
+- **`Fig4.pdf`** - Markovian dynamics and dephasing characterization
+- **`Fig6.pdf`** - Ellipsoid and GST analysis
+- **`Fig7.pdf`** - Non-Markovian ellipsoid and QPT comparison
+- **`Fig8.pdf`** - Raw data visualization and analysis
+
+These are the final polished figures ready for inclusion in the manuscript.
+
+### 🎨 Figure Generation Scripts (Root Level)
+Python scripts to automatically generate publication-quality figures:
+
+- **`Fig2_ellipsoid_QPT_GST.py`** - Plot ellipsoid, QPT, and GST comparsion figures
+- **`Fig3_nonMarkovian.py`** - Plot non-Markovian dynamics figures
+- **`Fig4_Markovian.py`** - Plot Markovian dynamics and dephasing figures
+- **`Fig6_ellipsoid_GST.py`** - Plot ellipsoid and GST comparsion figures
+- **`Fig7_nonMarkovian_ellipsoid_QPT.py`** - Plot non-Markovian ellipsoid and QPT comparison figures
+- **`Fig8_raw_data.py`** - Plot raw data figures
+- **`fig_utils.py`** - Shared utilities for figure generation  mostly use for non-Markovian data analysis
+
+Each script can be run independently to regenerate its corresponding publication figure.
 
 ### 📁 `quam_libs/` - Data Analysis Library
 Python library containing all analysis tools and utilities for processing experimental data:
 
 - **`analyzer.py`** - Main data analysis routines
 - **`quantum_memory/`** - Specialized modules for quantum memory analysis
-  - `swap_analyze.py` - iSWAP gate analysis
-  - `noise_analyze.py` - Noise characterization
-  - `iswap_simulation.py` - Theoretical simulations for iSWAP
 - **`ellipsoid_utils/`** - Ellipsoid fitting and state reconstruction methods
 - **`lib/`** - Utility functions for fitting, plotting, data handling
 - **`experiments/`** - Experimental execution and parameter definitions
@@ -32,51 +67,33 @@ Python library containing all analysis tools and utilities for processing experi
 - **`quantum_channel_utils.py`** - Quantum channel analysis utilities
 - Additional utilities: QI functions, simulation tools, noise modeling
 
-### 📈 `paper_figure/` - Publication Figures
-Contains all figures generated for publication:
-
-- Figure files (PDF format): FIg1.pdf, FIg2.pdf, Fig3_raw.pdf, Fig3_mle.pdf
-- Appendix figures and detailed analysis plots (AppendixC_raw.pdf, AppendixC_mle.pdf)
-- iSWAP characterization plots (T1 exponential decay, Rabi chevron patterns)
-
-These are the final polished figures ready for inclusion in the manuscript.
-
-### 📓 Analysis Notebooks (Root Level)
-Jupyter notebooks containing step-by-step data analysis workflows:
-
-- **`Markovian_data.ipynb`** - Analysis of Markovian quantum memory dynamics
-- **`non_Markovian_data.ipynb`** - Analysis of non-Markovian effects in quantum memory
-- **`non_Markovian150ns_data.ipynb`** - Non-Markovian analysis with 150ns time resolution
-- **`iSWAP_t1t2.ipynb`** - T1/T2 relaxation analysis for iSWAP gate operations
-- **`QPT_gate_error_vs_fidelity.ipynb`** - Quantum process tomography and gate fidelity correlation analysis
-
-Each notebook documents the experimental data processing, visualization, and interpretation steps.
-
 ### 🛠️ Additional Resources
 
 - **`pyproject.toml`** - Project dependencies and configuration (Python ≥3.12)
-  - Key dependencies: QuAM, PennyLane, QuTiP, CVXPY, Qiskit Experiments
+  - Key dependencies: QuAM,, QuTiP, CVXPY
+  - Uses `uv` for dependency management
   
-- **`dev/`** - Development scripts and supplementary analyses
-  
-- **`quam_libs/pyproject.toml`** - Workspace member configuration for the analysis library
 
-## Dependencies
-
-The project uses modern quantum computing Python stack:
-- **QuAM & QuAM-libs**: Quantum machine definition and utilities
-- **PennyLane**: Quantum machine learning and simulation
-- **QuTiP**: Quantum information theory computing
-- **Qiskit Experiments**: Quantum circuit experiments framework
-- **CVXPY**: Convex optimization for ellipsoid fitting
-- **xarray & netCDF4**: Large dataset handling and storage
+- **`_not_in_used/`** - Deprecated analysis scripts and notebooks (kept for reference)
 
 ## Workflow
 
-1. **Data Collection** → Raw data stored in `data/` subdirectories
-2. **Analysis** → Python scripts in `quam_libs/` process and analyze datasets
-3. **Visualization** → Jupyter notebooks in root apply analysis and generate visualizations
-4. **Publication** → Final figures exported to `paper_figure/` for manuscript
+1. **Data Collection** → Raw data stored in `data/` subdirectories by date
+2. **Processing** → Jupyter notebooks in `data_processing/` process and analyze datasets
+3. **Figure Generation** → Python scripts (Fig*.py) in root directory automatically generate publication-quality figures
+4. **Publication** → Final figures exported to `paper_figure/` PDF files for manuscript
+
+## Running Figure Generation
+
+To regenerate all publication figures:
+```bash
+python Fig2_ellipsoid_QPT_GST.py
+python Fig3_nonMarkovian.py
+python Fig4_Markovian.py
+python Fig6_ellipsoid_GST.py
+python Fig7_nonMarkovian_ellipsoid_QPT.py
+python Fig8_raw_data.py
+```
 
 ## License & Citation
 
